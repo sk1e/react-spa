@@ -30,4 +30,4 @@ function SwitchTheme() {
 
 const Component = React.memo(SwitchTheme);
 
-export { Component as SwitchTheme }
+export { Component as SwitchTheme };

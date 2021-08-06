@@ -65,7 +65,7 @@ export function makeDerivedUnit<T extends Array<unknown>>(
                 setDependencies(prev => R.update(index, state, prev));
               }),
             );
-          // eslint-disable-next-line react-hooks/exhaustive-deps
+            // eslint-disable-next-line react-hooks/exhaustive-deps
           }, []);
 
           return deriver(...(dependencies as StateTypes<T>));
