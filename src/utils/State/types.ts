@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Uninitialized } from './RequiredContext';
+
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
 export type StateSubscriber<T> = (state: T) => void;
@@ -16,7 +18,7 @@ export type StateUnit<T> = {
   useState(): T;
   initialState: T;
   ContextProvider: React.ComponentType;
-  SubscribeContext: React.Context<SubscribeContextData<T>>;
+  SubscribeContext: React.Context<SubscribeContextData<T> | Uninitialized>;
 };
 
 export type RenderInterface<T> = {
@@ -28,10 +30,6 @@ export type PrimaryStateUnit<T> = StateUnit<T> & {
   useSetState(): SetState<T>;
 };
 
-export type StoreStateInteface<T> = {
-  useState(): Record<ID, T>;
-};
-
 export type ID = string | number;
 
 type StoreMethods<T> = {
@@ -39,6 +37,6 @@ type StoreMethods<T> = {
   getUnit(id: ID): RenderInterface<T>;
 };
 
-export type Store<T> = PrimaryStateUnit<Record<ID, T>> & {
+export type UnitStore<T> = PrimaryStateUnit<Record<ID, T>> & {
   useMethods(): StoreMethods<T>;
 };

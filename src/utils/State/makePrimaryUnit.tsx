@@ -1,11 +1,6 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import { createRequiredContext, useRequiredContext } from './RequiredContext';
 import { getNewState } from './getNewState';
 import {
   StateSubscriber,
@@ -15,11 +10,10 @@ import {
 } from './types';
 
 export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
-  const PrivateStateContext = createContext<StateUnitWriteContextData<T>>(
-    null as any,
-  );
+  const PrivateStateContext =
+    createRequiredContext<StateUnitWriteContextData<T>>();
 
-  const SubscribeContext = createContext<SubscribeContextData<T>>(null as any);
+  const SubscribeContext = createRequiredContext<SubscribeContextData<T>>();
 
   function ContextProvider({ children }: React.PropsWithChildren<{}>) {
     const state = useRef<T>(initialState);
@@ -51,7 +45,7 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
     initialState,
     SubscribeContext,
     useState: () => {
-      const { subscribe } = useContext(SubscribeContext);
+      const { subscribe } = useRequiredContext(SubscribeContext);
 
       const [state, setState] = useState<T>(initialState);
 
@@ -61,7 +55,7 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
       return state;
     },
     useSetState: () => {
-      return useContext(PrivateStateContext).setState;
+      return useRequiredContext(PrivateStateContext).setState;
     },
     ContextProvider,
   };

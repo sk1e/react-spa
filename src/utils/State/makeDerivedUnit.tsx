@@ -1,6 +1,7 @@
 import * as R from 'ramda';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import { createRequiredContext, useRequiredContext } from './RequiredContext';
 import { StateSubscriber, StateUnit, SubscribeContextData } from './types';
 
 type StateTypes<T, Acc extends Array<unknown> = []> = T extends []
@@ -23,9 +24,7 @@ export function makeDerivedUnit<T extends Array<unknown>>(
       );
       const initialState = deriver(...(unitsInitialState as StateTypes<T>));
 
-      const SubscribeContext = createContext<SubscribeContextData<R>>(
-        null as any,
-      );
+      const SubscribeContext = createRequiredContext<SubscribeContextData<R>>();
 
       const ContextProvider = ({ children }: React.PropsWithChildren<{}>) => {
         const subscribers = useRef<Array<StateSubscriber<R>>>([]);
@@ -57,7 +56,7 @@ export function makeDerivedUnit<T extends Array<unknown>>(
 
           const contextsData = (stateUnits as Array<StateUnit<unknown>>)
             // eslint-disable-next-line react-hooks/rules-of-hooks
-            .map(x => useContext(x.SubscribeContext));
+            .map(x => useRequiredContext(x.SubscribeContext));
 
           useEffect(() => {
             contextsData.forEach((x, index) =>

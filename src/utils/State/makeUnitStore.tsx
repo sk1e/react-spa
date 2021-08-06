@@ -1,10 +1,11 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import { createRequiredContext, useRequiredContext } from './RequiredContext';
 import { getNewState } from './getNewState';
 import {
   ID,
   SubscribeContextData,
-  Store,
+  UnitStore,
   StateUnitWriteContextData,
   RenderInterface,
 } from './types';
@@ -17,17 +18,16 @@ type StoreData<T> = StateUnitWriteContextData<Record<ID, T>> & {
   getUnit(id: ID): RenderInterface<T>;
 };
 
-export function makeUnitManager<T>(): Store<T> {
-  const StoreContext = createContext<StoreData<T>>(null as any);
-  const SubscribeContext = createContext<SubscribeContextData<Record<ID, T>>>(
-    null as any,
-  );
+export function makeUnitStore<T>(): UnitStore<T> {
+  const StoreContext = createRequiredContext<StoreData<T>>();
+  const SubscribeContext =
+    createRequiredContext<SubscribeContextData<Record<ID, T>>>();
 
   function ContextProvider({ children }: React.PropsWithChildren<{}>) {
     const storeState = useRef<Record<ID, T>>({});
-    const instanceSubscribers = useRef<
-      Record<ID, Array<InstanceSubscriber<T>>>
-    >({});
+    const unitSubscribers = useRef<Record<ID, Array<InstanceSubscriber<T>>>>(
+      {},
+    );
     const storeSubscribers = useRef<Array<StoreSubscriber<T>>>([]);
 
     const subscribeStore = (subscriber: StoreSubscriber<T>): (() => void) => {
@@ -40,16 +40,16 @@ export function makeUnitManager<T>(): Store<T> {
       };
     };
 
-    const subscribeInstance = (
+    const subscribeUnit = (
       id: ID,
       handler: (state: T) => void,
     ): (() => void) => {
-      instanceSubscribers.current[id].push(handler);
+      unitSubscribers.current[id].push(handler);
 
       return () => {
-        instanceSubscribers.current = {
-          ...instanceSubscribers.current,
-          [id]: instanceSubscribers.current[id].filter(x => x !== handler),
+        unitSubscribers.current = {
+          ...unitSubscribers.current,
+          [id]: unitSubscribers.current[id].filter(x => x !== handler),
         };
       };
     };
@@ -72,7 +72,7 @@ export function makeUnitManager<T>(): Store<T> {
 
       storeSubscribers.current.forEach(f => f(newState));
       updatedProperties.forEach(prop =>
-        instanceSubscribers.current[prop].forEach(f => f(newState[prop])),
+        unitSubscribers.current[prop].forEach(f => f(newState[prop])),
       );
     };
 
@@ -81,7 +81,7 @@ export function makeUnitManager<T>(): Store<T> {
         useState: () => {
           const [state, setState] = useState(storeState.current[id]);
 
-          useEffect(() => subscribeInstance(id, s => setState(s)), []);
+          useEffect(() => subscribeUnit(id, s => setState(s)), []);
 
           return state;
         },
@@ -94,7 +94,7 @@ export function makeUnitManager<T>(): Store<T> {
     };
 
     const addUnit = (id: ID, initialState: T): void => {
-      instanceSubscribers.current[id] = [];
+      unitSubscribers.current[id] = [];
       setStoreState(prev => ({ ...prev, [id]: initialState }));
     };
 
@@ -117,7 +117,7 @@ export function makeUnitManager<T>(): Store<T> {
     SubscribeContext,
     initialState: {},
     useState: () => {
-      const { subscribe } = useContext(SubscribeContext);
+      const { subscribe } = useRequiredContext(SubscribeContext);
 
       const [state, setState] = useState<Record<ID, T>>({});
 
@@ -126,11 +126,11 @@ export function makeUnitManager<T>(): Store<T> {
       return state;
     },
     useSetState: () => {
-      return useContext(StoreContext).setState;
+      return useRequiredContext(StoreContext).setState;
     },
     ContextProvider,
     useMethods: () => {
-      const { addUnit, getUnit } = useContext(StoreContext);
+      const { addUnit, getUnit } = useRequiredContext(StoreContext);
 
       return {
         addUnit,

@@ -1,4 +1,4 @@
 export { makePrimaryUnit } from './makePrimaryUnit';
 export { makeDerivedUnit } from './makeDerivedUnit';
-export { makeUnitManager } from './makeUnitManager';
+export { makeUnitStore } from './makeUnitStore';
 export * from './types';

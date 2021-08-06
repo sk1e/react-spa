@@ -1,6 +1,6 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
-import { makeDerivedUnit, makeUnitManager } from 'utils/State';
+import { makeDerivedUnit, makeUnitStore } from 'utils/State';
 import { block } from 'utils/classname';
 import { naturalNumbers } from 'utils/math';
 import { withContextProviders } from 'utils/withContextProviders';
@@ -26,7 +26,7 @@ type RippleAnimation = {
   id: number;
 };
 
-const rippleStateStore = makeUnitManager<Ripple.State>();
+const rippleStateStore = makeUnitStore<Ripple.State>();
 
 const allAnimationsAreCompletedUnit = makeDerivedUnit(rippleStateStore).getUnit(
   animations => Object.values(animations).every(x => x === 'finished'),
