@@ -5,6 +5,8 @@ import { block, classnames } from 'utils/classname';
 import './style.scss';
 import * as TS from './types';
 
+export * from './types';
+
 const b = block('text');
 
 export type Props = {
