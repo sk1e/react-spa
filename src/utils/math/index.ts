@@ -1,0 +1,1 @@
+export { naturalNumbers } from './naturalNumbers';

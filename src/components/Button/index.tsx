@@ -2,6 +2,7 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 import { makeDerivedUnit, makeUnitManager } from 'utils/State';
 import { block } from 'utils/classname';
+import { naturalNumbers } from 'utils/math';
 import { withContextProviders } from 'utils/withContextProviders';
 
 import { Ripple } from './components';
@@ -17,12 +18,6 @@ type Props = {
   variant?: 'primary' | 'secondary';
 } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'classname' | 'type'> &
   { [K in 'type']-?: React.ButtonHTMLAttributes<HTMLButtonElement>[K] };
-
-function* naturalNumbers() {
-  for (let i = 0; ; ++i) {
-    yield i;
-  }
-}
 
 const numbers = naturalNumbers();
 
