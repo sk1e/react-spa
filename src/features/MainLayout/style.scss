@@ -1,0 +1,22 @@
+.main-layout {
+  background: var(--color-bg-1);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  &__sidebar-and-content {
+    background: var(--color-bg-1);
+    height: 100%;
+    display: flex;
+  }
+
+  &__sidebar {
+    height: 100%;
+    padding: 10px;
+    background: var(--color-bg-2);
+  }
+
+  &__content {
+    padding: 10px;
+  }
+}

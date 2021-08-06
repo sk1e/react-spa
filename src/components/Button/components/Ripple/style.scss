@@ -1,0 +1,28 @@
+$gray: #cccccc;
+
+@keyframes ripple {
+  0% {
+    background-size: 100%;
+  }
+
+  100% {
+    background-size: 3200%;
+  }
+}
+
+.button-ripple {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: center no-repeat
+    radial-gradient(
+      circle,
+      rgba($gray, 0.4) 2%,
+      rgba($gray, 0.3) 4%,
+      rgba($gray, 0.4) 8%,
+      rgba($gray, 0.2) 12%
+    );
+  background-size: 0;
+  transform: translate(-50%, -50%);
+  animation: ripple 500ms ease-in;
+}

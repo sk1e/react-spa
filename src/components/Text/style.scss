@@ -1,0 +1,69 @@
+.text {
+  transition: color 300ms;
+
+  &_typography {
+    &_text {
+      &-m {
+        font-size: 14px;
+      }
+
+      &-s {
+        font-size: 12px;
+      }
+    }
+
+    &_heading {
+      &-m {
+        font-size: 22px;
+      }
+
+      &-xl {
+        font-size: 40px;
+      }
+    }
+
+    &_label {
+      &-m {
+        font-size: 12px;
+      }
+    }
+  }
+
+  &_color {
+    &_primary {
+      color: var(--color-fg-primary);
+    }
+
+    &_secondary {
+      color: var(--color-fg-secondary);
+    }
+
+    &_error {
+      color: var(--color-fg-error);
+    }
+  }
+
+  &_weight {
+    &_normal {
+      font-weight: 400;
+    }
+
+    &_bold {
+      font-weight: 700;
+    }
+  }
+
+  &_align {
+    &_left {
+      text-align: left;
+    }
+
+    &_center {
+      text-align: center;
+    }
+
+    &_right {
+      text-align: right;
+    }
+  }
+}
