@@ -78,6 +78,4 @@ function StyleProvider({ children }: React.PropsWithChildren<Props>) {
   return <div style={makeStyle(theme)}>{children}</div>;
 }
 
-const Component = React.memo(StyleProvider);
-
-export { Component as StyleProvider };
+export const Component = React.memo(StyleProvider);

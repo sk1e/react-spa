@@ -1,7 +1,6 @@
 import { Text } from 'components';
 import { MainLayout } from 'features/MainLayout';
-import { StyleProvider } from 'features/StyleProvider';
-import { themeStateUnit } from 'features/SwitchTheme';
+import * as globalFeatures from 'features/global';
 import { block } from 'utils/classname';
 import { withContextProviders } from 'utils/withContextProviders';
 
@@ -11,14 +10,16 @@ const b = block('app');
 
 function App() {
   return (
-    <StyleProvider>
+    <globalFeatures.StyleProvider.Component>
       <div className={b()}>
         <MainLayout>
           <Text.Component>main content</Text.Component>
         </MainLayout>
       </div>
-    </StyleProvider>
+    </globalFeatures.StyleProvider.Component>
   );
 }
 
-export default withContextProviders(App, [themeStateUnit.ContextProvider]);
+export default withContextProviders(App, [
+  globalFeatures.SwitchTheme.themeStateUnit.ContextProvider,
+]);
