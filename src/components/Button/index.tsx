@@ -46,6 +46,9 @@ function Button({
   const setRippleStateStoreValue = rippleStateStore.useSetState();
 
   useLayoutEffect(() => {
+    // NOTE ripple animation node should not be detached when mouse button was pressed but not released,
+    // otherwise click event will not be dispatched after mouse release.
+    // All animations become completed outside of this range of time, so we can safely unmount them here
     if (allAnimationsAreCompleted) {
       setRippleAnimations([]);
       setRippleStateStoreValue({});
