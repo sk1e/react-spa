@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Uninitialized } from './RequiredContext';
+import { RequiredContext } from '../RequiredContext';
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
@@ -18,7 +18,7 @@ export type StateUnit<T> = {
   useState(): T;
   initialState: T;
   ContextProvider: React.ComponentType;
-  SubscribeContext: React.Context<SubscribeContextData<T> | Uninitialized>;
+  SubscribeContext: RequiredContext<SubscribeContextData<T>>;
 };
 
 export type RenderInterface<T> = {

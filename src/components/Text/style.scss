@@ -1,3 +1,5 @@
+@use "style/colors";
+
 .text {
   transition: color 300ms;
 
@@ -31,15 +33,21 @@
 
   &_color {
     &_primary {
-      color: var(--color-fg-primary);
+      @include colors.themed-color('fg-primary') using ($color) {
+        color: $color;
+      }
     }
 
     &_secondary {
-      color: var(--color-fg-secondary);
+      @include colors.themed-color('fg-secondary') using ($color) {
+        color: $color;
+      }
     }
 
     &_error {
-      color: var(--color-fg-error);
+      @include colors.themed-color('fg-error') using ($color) {
+        color: $color;
+      }
     }
   }
 

@@ -1,5 +1,6 @@
+@use 'style/colors';
+
 body {
-  color: var(--color-fg-primary);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -13,12 +14,7 @@ code {
     monospace;
 }
 
-.app {
-  color: var(--color-fg-primary);
-}
-
 * {
-  transition: background 300ms;
   box-sizing: border-box;
 }
 
@@ -35,13 +31,4 @@ code {
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

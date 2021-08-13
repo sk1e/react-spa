@@ -1,6 +1,16 @@
+@use "style/colors";
+
 .header {
+  transition: background 300ms;
   display: flex;
   padding: 10px;
   justify-content: flex-end;
-  background: var(--color-bg-2);
+
+  @include colors.themed-bg(2) using ($color) {
+    background: $color;
+  }
+
+  &__switch-theme {
+    margin-left: 10px;
+  }
 }

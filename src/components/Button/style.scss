@@ -1,3 +1,6 @@
+@use 'style/colors';
+@use 'sass:color';
+
 .button {
   overflow: hidden;
   position: relative;
@@ -18,6 +21,7 @@
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
   color: white;
 
   &:hover {
@@ -32,14 +36,14 @@
 
   &_variant {
     &_primary {
-      background: var(--color-accent-primary);
+      @include colors.themed-color('accent-primary') using ($color) {
+        background: $color;
+      }
 
       &:hover {
-        background: hsl(
-          var(--color-accent-primary-hue),
-          var(--color-accent-primary-saturation),
-          calc(var(--color-accent-primary-lightness) - 7%)
-        );
+        @include colors.themed-color('accent-primary') using ($color) {
+          background: darken($color, 7%);
+        }
       }
     }
   }
@@ -53,10 +57,8 @@
   }
 
   &:disabled {
-    background: hsl(
-      var(--color-primary-hue),
-      10%,
-      var(--color-primary-lightness)
-    );
+    @include colors.themed-color('accent-primary') using ($color) {
+      background: color.change($color, $saturation: 10%);
+    }
   }
 }

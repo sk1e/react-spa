@@ -1,0 +1,68 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:color";
+
+$colors: (
+  'dark': (
+    'bg': #262626,
+    'fg-primary': #ccc,
+    'fg-secondary': #aaa,
+    'fg-error': #ee2b2b,
+    'accent-primary': #7029f5,
+  ),
+  'light': (
+    'bg': #f2f2f2,
+    'fg-primary': #0d0d0d,
+    'fg-secondary': #404040,
+    'fg-error': #ee2b2b,
+    'accent-primary': #1f8fff,
+  ),
+);
+
+$level-step: (
+  'dark': +3%,
+  'light': -5%,
+);
+
+@function get($theme, $prop) {
+  @return map.get(map.get($colors, $theme), $prop);
+}
+
+@mixin themed-rule($theme) {
+  @if not list.index(map.keys($colors), $theme) {
+    @error "no such theme, #{$theme}, valid are: #{$themes}";
+  }
+
+  .body_theme_#{$theme} & {
+    @content;
+  }
+}
+
+@mixin themed-bg($lightness-level) {
+  @each $theme in map.keys($colors) {
+    $theme-colors: map.get($colors, $theme);
+
+    $diff: map.get($level-step, $theme) * $lightness-level;
+
+    $color: map.get($theme-colors, 'bg');
+    $adjusted: color.adjust($color, $lightness: $diff);
+
+    .body_theme_#{$theme} & {
+      @content ($adjusted);
+    }
+  }
+}
+
+@mixin themed-color($prop) {
+  @each $theme in map.keys($colors) {
+    $theme-colors: map.get($colors, $theme);
+
+    @if not map.has-key($theme-colors, $prop) {
+      @error "no such color with key #{$prop} in theme #{$theme}, valid are: #{map.keys(map.get($colors, $theme))}";
+    }
+
+    .body_theme_#{$theme} & {
+      @content (map.get($theme-colors, $prop));
+    }
+  }
+}

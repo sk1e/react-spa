@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { createRequiredContext, useRequiredContext } from './RequiredContext';
+import { createRequiredContext, useRequiredContext } from '../RequiredContext';
 import { getNewState } from './getNewState';
 import {
   StateSubscriber,

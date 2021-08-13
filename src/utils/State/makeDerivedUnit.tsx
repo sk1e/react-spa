@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { useEffect, useRef, useState } from 'react';
 
-import { createRequiredContext, useRequiredContext } from './RequiredContext';
+import { createRequiredContext, useRequiredContext } from '../RequiredContext';
 import { StateSubscriber, StateUnit, SubscribeContextData } from './types';
 
 type StateTypes<T, Acc extends Array<unknown> = []> = T extends []

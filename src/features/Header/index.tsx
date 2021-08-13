@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SwitchTheme } from 'features/global';
+import { SwitchTheme, Language } from 'features/global';
 import { block } from 'utils/classname';
 
 import './style.scss';
@@ -12,7 +12,10 @@ type Props = {};
 function Header({}: Props) {
   return (
     <div className={b()}>
-      <SwitchTheme.Component />
+      <Language.SwitchLang />
+      <div className={b('switch-theme')}>
+        <SwitchTheme.Component />
+      </div>
     </div>
   );
 }

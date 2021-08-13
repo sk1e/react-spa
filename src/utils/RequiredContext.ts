@@ -4,6 +4,8 @@ const uninitializedContextData = Symbol('uninitialized');
 
 export type Uninitialized = typeof uninitializedContextData;
 
+export type RequiredContext<T> = React.Context<T | Uninitialized>;
+
 export function createRequiredContext<T>() {
   return createContext<T | Uninitialized>(uninitializedContextData);
 }
