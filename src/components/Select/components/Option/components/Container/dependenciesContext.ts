@@ -1,5 +1,5 @@
-import { createRequiredContext } from 'utils/RequiredContext';
 import { SetState } from 'utils/State';
+import { createRequiredContext } from 'utils/react/RequiredContext';
 
 type Dependencies<T> = {
   setActiveOption: SetState<T>;

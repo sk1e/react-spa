@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import * as stateUtility from 'utils/State';
+import { UnitRenderInterface } from 'utils/State';
 import { block } from 'utils/classname';
 
 import './style.scss';
@@ -18,7 +18,7 @@ export type State = AnimationStatus;
 
 type Props = {
   positionStyle: PositionStyle;
-  unit: stateUtility.RenderInterface<AnimationStatus>;
+  unit: UnitRenderInterface<AnimationStatus>;
 };
 
 function Ripple({ positionStyle, unit }: Props) {

@@ -9,16 +9,16 @@ export * from './types';
 
 const b = block('text');
 
-export type Props = {
+export type Props<T extends TS.Tag> = {
   typography?: TS.Typography;
   color?: TS.Color;
-  as?: TS.Tag;
+  as?: T;
   className?: string;
   weight?: TS.Weight;
   align?: TS.Align;
-};
+} & JSX.IntrinsicElements[T];
 
-function Text(props: React.PropsWithChildren<Props>) {
+function Text<T extends TS.Tag>(props: React.PropsWithChildren<Props<T>>) {
   const {
     className,
     as = 'div',
@@ -27,12 +27,14 @@ function Text(props: React.PropsWithChildren<Props>) {
     weight = 'normal',
     align = 'left',
     children,
+    ...restProps
   } = props;
 
   return React.createElement(
     as,
     {
       className: classnames(className, b({ typography, color, weight, align })),
+      ...restProps,
     },
     children,
   );

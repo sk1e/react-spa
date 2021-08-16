@@ -1,26 +1,25 @@
 import React from 'react';
 
 import { Select } from 'components';
+import { Language } from 'types';
 import { block } from 'utils/classname';
 
 import { activeLangStateUnit } from './activeLangStateUnit';
 import './style.scss';
-import { Lang } from './types';
 
 export { useTranslation } from './useTranslation';
 export { activeLangStateUnit } from './activeLangStateUnit';
-export type { Lang } from './types';
 
 const b = block('switch-lang');
 
 type Props = {};
 
-const langToLabel: Record<Lang, string> = {
+const langToLabel: Record<Language, string> = {
   en: 'English',
   ru: 'Русский',
 };
 
-function Option({ option }: Select.Option.Props<Lang>) {
+function Option({ option }: Select.Option.Props<Language>) {
   return (
     <Select.Option.Container.DefaultComponent classname={b('option-container')}>
       <Select.Option.Content.DefaultComponent option={langToLabel[option]} />
@@ -28,7 +27,7 @@ function Option({ option }: Select.Option.Props<Lang>) {
   );
 }
 
-function ActiveOption({ option }: Select.Option.Props<Lang>) {
+function ActiveOption({ option }: Select.Option.Props<Language>) {
   return (
     <Select.ActiveOption.Container.DefaultComponent
       classname={b('option-container')}
@@ -41,7 +40,7 @@ function ActiveOption({ option }: Select.Option.Props<Lang>) {
 function SwitchLang({}: Props) {
   return (
     <div className={b()}>
-      <Select.Component<Lang>
+      <Select.Component<Language>
         options={['en', 'ru']}
         activeOptionState={activeLangStateUnit}
         Option={Option}

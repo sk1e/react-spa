@@ -1,6 +1,7 @@
-import { activeLangStateUnit } from './activeLangStateUnit';
-import { Lang } from './types';
+import { Language } from 'types';
 
-export function useTranslation(translations: Record<Lang, string>) {
+import { activeLangStateUnit } from './activeLangStateUnit';
+
+export function useTranslation(translations: Record<Language, string>) {
   return translations[activeLangStateUnit.useState()];
 }

@@ -1,0 +1,39 @@
+@use "style/colors";
+@use "sass:color";
+
+.text-input {
+  $r: &;
+
+  &__input {
+    display: block;
+    background: transparent;
+    padding: 3px;
+    border-radius: 3px;
+
+    @include colors.themed-color('fg-primary') using ($color) {
+      color: $color;
+    }
+
+    #{$r}_invalid & {
+      @include colors.themed-color('fg-error') using ($color) {
+        border: 1px solid $color;
+      }
+
+      &:hover {
+        @include colors.themed-color('fg-error') using ($color) {
+          border: 1px solid color.adjust($color, $saturation: 30%);
+        }
+      }
+    }
+
+    @include colors.themed-bg(3) using ($color) {
+      border: 1px solid $color;
+    }
+
+    &:hover {
+      @include colors.themed-bg(4) using ($color) {
+        border: 1px solid $color;
+      }
+    }
+  }
+}

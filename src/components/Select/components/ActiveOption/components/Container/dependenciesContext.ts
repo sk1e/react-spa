@@ -1,4 +1,4 @@
-import { createRequiredContext } from 'utils/RequiredContext';
+import { createRequiredContext } from 'utils/react/RequiredContext';
 
 export const DependenciesContext = createRequiredContext<Dependencies>();
 

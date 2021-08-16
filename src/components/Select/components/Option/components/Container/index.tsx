@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 
-import { useRequiredContext } from 'utils/RequiredContext';
 import { block } from 'utils/classname';
+import { useRequiredContext } from 'utils/react/RequiredContext';
 
 import { DependenciesContext } from './dependenciesContext';
 

@@ -3,7 +3,7 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { makeDerivedUnit, makeUnitStore } from 'utils/State';
 import { block } from 'utils/classname';
 import { naturalNumbers } from 'utils/math';
-import { withContextProviders } from 'utils/withContextProviders';
+import { withContextProviders } from 'utils/react/withContextProviders';
 
 import { Ripple } from './components';
 import './style.scss';
@@ -37,6 +37,7 @@ function Button({
   variant = 'primary',
   onMouseDown,
   children,
+  className,
   ...props
 }: React.PropsWithChildren<Props>) {
   const [rippleAnimations, setRippleAnimations] = useState<RippleAnimation[]>(
@@ -87,11 +88,14 @@ function Button({
 
   return (
     <button
-      className={b({
-        size,
-        variant,
-        'no-animations': rippleAnimations.length === 0,
-      })}
+      className={b(
+        {
+          size,
+          variant,
+          'no-animations': rippleAnimations.length === 0,
+        },
+        [className],
+      )}
       onMouseDown={handleMouseDown}
       ref={ref}
       {...props}

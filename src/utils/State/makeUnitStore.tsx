@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { createRequiredContext, useRequiredContext } from '../RequiredContext';
+import {
+  createRequiredContext,
+  useRequiredContext,
+} from '../react/RequiredContext';
 import { getNewState } from './getNewState';
 import {
   ID,
   SubscribeContextData,
   UnitStore,
   StateUnitWriteContextData,
-  RenderInterface,
+  UnitRenderInterface,
 } from './types';
 
 type StoreSubscriber<T> = (state: Record<ID, T>) => void;
@@ -15,7 +18,7 @@ type InstanceSubscriber<T> = (state: T) => void;
 
 type StoreData<T> = StateUnitWriteContextData<Record<ID, T>> & {
   addUnit(id: ID, initialState: T): void;
-  getUnit(id: ID): RenderInterface<T>;
+  getUnit(id: ID): UnitRenderInterface<T>;
 };
 
 export function makeUnitStore<T>(): UnitStore<T> {
@@ -76,7 +79,7 @@ export function makeUnitStore<T>(): UnitStore<T> {
       );
     };
 
-    const getUnit = (id: ID): RenderInterface<T> => {
+    const getUnit = (id: ID): UnitRenderInterface<T> => {
       return {
         useState: () => {
           const [state, setState] = useState(storeState.current[id]);
@@ -136,6 +139,10 @@ export function makeUnitStore<T>(): UnitStore<T> {
         addUnit,
         getUnit,
       };
+    },
+    useGetState: () => (): Record<string, T> => {
+      // TODO implement
+      throw new Error('not implemented');
     },
   };
 }

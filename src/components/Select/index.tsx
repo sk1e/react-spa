@@ -1,7 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { RenderInterface } from 'utils/State';
+import { UnitRenderInterface } from 'utils/State';
 import { block } from 'utils/classname';
 
 import * as c from './components';
@@ -15,7 +15,7 @@ type Props<T> = {
   options: T[];
   ActiveOption?: React.ComponentType<c.Option.Props<T>>;
   Option?: React.ComponentType<c.ActiveOption.Props<T>>;
-  activeOptionState: RenderInterface<T>;
+  activeOptionState: UnitRenderInterface<T>;
 };
 
 function getOptionsStyle(

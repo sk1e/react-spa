@@ -1,5 +1,4 @@
+import { Language } from 'types';
 import { makePrimaryUnit } from 'utils/State';
 
-import { Lang } from './types';
-
-export const activeLangStateUnit = makePrimaryUnit<Lang>('ru');
+export const activeLangStateUnit = makePrimaryUnit<Language>('ru');

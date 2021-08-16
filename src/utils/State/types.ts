@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { RequiredContext } from '../RequiredContext';
+import { RequiredContext } from '../react/RequiredContext';
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
@@ -16,12 +16,13 @@ export type StateUnitWriteContextData<T> = {
 
 export type StateUnit<T> = {
   useState(): T;
+  useGetState(): () => T;
   initialState: T;
   ContextProvider: React.ComponentType;
   SubscribeContext: RequiredContext<SubscribeContextData<T>>;
 };
 
-export type RenderInterface<T> = {
+export type UnitRenderInterface<T> = {
   useState(): T;
   useSetState(): SetState<T>;
 };
@@ -34,7 +35,7 @@ export type ID = string | number;
 
 type StoreMethods<T> = {
   addUnit(id: ID, initialState: T): void;
-  getUnit(id: ID): RenderInterface<T>;
+  getUnit(id: ID): UnitRenderInterface<T>;
 };
 
 export type UnitStore<T> = PrimaryStateUnit<Record<ID, T>> & {

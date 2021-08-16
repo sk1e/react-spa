@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { createRequiredContext, useRequiredContext } from '../RequiredContext';
+import {
+  createRequiredContext,
+  useRequiredContext,
+} from '../react/RequiredContext';
 import { getNewState } from './getNewState';
 import {
   StateSubscriber,
@@ -9,9 +12,12 @@ import {
   StateUnitWriteContextData,
 } from './types';
 
+type PrivateContextData<T> = {
+  getState(): T;
+} & StateUnitWriteContextData<T>;
+
 export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
-  const PrivateStateContext =
-    createRequiredContext<StateUnitWriteContextData<T>>();
+  const PrivateStateContext = createRequiredContext<PrivateContextData<T>>();
 
   const SubscribeContext = createRequiredContext<SubscribeContextData<T>>();
 
@@ -32,9 +38,11 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
       subscribers.current.forEach(f => f(state.current));
     };
 
+    const getState = () => state.current;
+
     return (
       <SubscribeContext.Provider value={{ subscribe }}>
-        <PrivateStateContext.Provider value={{ setState }}>
+        <PrivateStateContext.Provider value={{ setState, getState }}>
           {children}
         </PrivateStateContext.Provider>
       </SubscribeContext.Provider>
@@ -56,6 +64,9 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
     },
     useSetState: () => {
       return useRequiredContext(PrivateStateContext).setState;
+    },
+    useGetState: () => {
+      return useRequiredContext(PrivateStateContext).getState;
     },
     ContextProvider,
   };

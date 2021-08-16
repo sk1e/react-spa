@@ -1,7 +1,10 @@
 import * as R from 'ramda';
 import { useEffect, useRef, useState } from 'react';
 
-import { createRequiredContext, useRequiredContext } from '../RequiredContext';
+import {
+  createRequiredContext,
+  useRequiredContext,
+} from '../react/RequiredContext';
 import { StateSubscriber, StateUnit, SubscribeContextData } from './types';
 
 type StateTypes<T, Acc extends Array<unknown> = []> = T extends []
@@ -68,6 +71,10 @@ export function makeDerivedUnit<T extends Array<unknown>>(
           }, []);
 
           return deriver(...(dependencies as StateTypes<T>));
+        },
+        useGetState: () => (): R => {
+          // TODO add ref to context, mutate it on useState, pass from ref here
+          throw new Error('not implemented');
         },
       };
     },

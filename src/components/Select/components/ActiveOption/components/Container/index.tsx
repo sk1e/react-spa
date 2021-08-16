@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useRequiredContext } from 'utils/RequiredContext';
 import { block } from 'utils/classname';
+import { useRequiredContext } from 'utils/react/RequiredContext';
 
 import * as Icon from '../Icon';
 import { DependenciesContext } from './dependenciesContext';
