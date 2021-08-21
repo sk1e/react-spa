@@ -102,13 +102,11 @@ export function makeUnitStore<T>(): UnitStore<T> {
     };
 
     return (
-      <SubscribeContext.Provider value={{ subscribe: subscribeStore }}>
+      <SubscribeContext.Provider subscribe={subscribeStore}>
         <StoreContext.Provider
-          value={{
-            addUnit,
-            getUnit,
-            setState: setStoreStatePublic,
-          }}
+          addUnit={addUnit}
+          getUnit={getUnit}
+          setState={setStoreStatePublic}
         >
           {children}
         </StoreContext.Provider>

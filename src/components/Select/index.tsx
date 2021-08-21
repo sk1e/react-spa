@@ -86,7 +86,7 @@ function Select<T>(props: Props<T>) {
   return (
     <div className={b({ expanded: isExpanded })} ref={ref}>
       <c.ActiveOption.Container.DependenciesContext.Provider
-        value={{ onClick: handleActiveOptionClick }}
+        onClick={handleActiveOptionClick}
       >
         <ActiveOption option={activeOption} />
       </c.ActiveOption.Container.DependenciesContext.Provider>
@@ -102,12 +102,10 @@ function Select<T>(props: Props<T>) {
 
               return (
                 <c.Option.Container.DependenciesContext.Provider
-                  value={{
-                    isActive,
-                    option: x,
-                    setActiveOption,
-                    setSelectIsExpanded: setIsExpanded,
-                  }}
+                  isActive={isActive}
+                  option={x}
+                  setActiveOption={setActiveOption}
+                  setSelectIsExpanded={setIsExpanded}
                 >
                   <Option<T> key={index} option={x} />
                 </c.Option.Container.DependenciesContext.Provider>

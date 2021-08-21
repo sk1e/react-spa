@@ -1,0 +1,17 @@
+@use "style/colors";
+
+.tab-panel {
+  &__active-tab-line {
+    width: 150px;
+    height: 2px;
+    transition: transform 300ms;
+
+    @include colors.themed-color('fg-accent') using ($color) {
+      background: $color;
+    }
+  }
+
+  &__tabs {
+    display: flex;
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { RequiredContext } from '../react/RequiredContext';
+import { CustomContext } from '../react/RequiredContext';
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
@@ -19,7 +19,7 @@ export type StateUnit<T> = {
   useGetState(): () => T;
   initialState: T;
   ContextProvider: React.ComponentType;
-  SubscribeContext: RequiredContext<SubscribeContextData<T>>;
+  SubscribeContext: CustomContext<SubscribeContextData<T>>;
 };
 
 export type UnitRenderInterface<T> = {

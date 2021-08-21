@@ -9,9 +9,11 @@ import './style.scss';
 
 const b = block('main-layout');
 
-type Props = {};
+type Props = {
+  TabPanel?: React.ComponentType;
+};
 
-function MainLayout({ children }: React.PropsWithChildren<Props>) {
+function MainLayout({ children, TabPanel }: React.PropsWithChildren<Props>) {
   const sidebarText = Language.useTranslation({
     en: 'sidebar',
     ru: 'боковая панель',
@@ -24,7 +26,10 @@ function MainLayout({ children }: React.PropsWithChildren<Props>) {
         <div className={b('sidebar')}>
           <Text.Component>{sidebarText}</Text.Component>
         </div>
-        <div className={b('content')}>{children}</div>
+        <div className={b('content-outer')}>
+          {TabPanel && <TabPanel />}
+          <div className={b('content-inner')}>{children}</div>
+        </div>
       </div>
     </div>
   );

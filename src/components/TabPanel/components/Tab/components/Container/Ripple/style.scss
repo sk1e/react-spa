@@ -1,0 +1,29 @@
+$gray: #cccccc;
+
+@keyframes tab-ripple {
+  0% {
+    background-size: 20%;
+  }
+
+  100% {
+    background-size: 2000%;
+  }
+}
+
+.tab-ripple {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: center no-repeat
+    radial-gradient(
+      circle,
+      rgba($gray, 0.4) 1%,
+      rgba($gray, 0.3) 2%,
+      rgba($gray, 0.4) 3%,
+      rgba($gray, 0.2) 4%,
+      transparent 5%
+    );
+  background-size: 0;
+  transform: translate(-50%, -50%);
+  animation: tab-ripple 500ms ease-in;
+}

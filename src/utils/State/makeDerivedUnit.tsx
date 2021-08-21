@@ -43,7 +43,7 @@ export function makeDerivedUnit<T extends Array<unknown>>(
         };
 
         return (
-          <SubscribeContext.Provider value={{ subscribe }}>
+          <SubscribeContext.Provider subscribe={subscribe}>
             {children}
           </SubscribeContext.Provider>
         );

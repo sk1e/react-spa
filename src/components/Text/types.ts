@@ -8,7 +8,9 @@ export type Typography =
   | 'heading-l'
   | 'text-s'
   | 'text-m'
-  | 'label-m';
+  | 'label-m'
+  | 'label-l'
+  | 'label-xl';
 
 export type Color = 'primary' | 'secondary' | 'error';
 

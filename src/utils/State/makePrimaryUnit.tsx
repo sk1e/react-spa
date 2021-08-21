@@ -41,8 +41,8 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
     const getState = () => state.current;
 
     return (
-      <SubscribeContext.Provider value={{ subscribe }}>
-        <PrivateStateContext.Provider value={{ setState, getState }}>
+      <SubscribeContext.Provider subscribe={subscribe}>
+        <PrivateStateContext.Provider getState={getState} setState={setState}>
           {children}
         </PrivateStateContext.Provider>
       </SubscribeContext.Provider>
