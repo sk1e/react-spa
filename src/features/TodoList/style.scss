@@ -1,3 +1,7 @@
 .todo-list {
   display: block;
+
+  &__list {
+    margin-top: 10px;
+  }
 }

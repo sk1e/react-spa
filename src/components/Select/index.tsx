@@ -46,16 +46,14 @@ function Select<T>(props: Props<T>) {
 
   const [optionsStyle, setOptionsStyle] = useState<React.CSSProperties>();
 
-  const handleDocumentBodyClick = useCallback(() => {
-    if (optionsRef.current) {
+  const handleDocumentBodyClick = useCallback((e: MouseEvent) => {
+    if (!ref.current?.contains(e.target as HTMLElement)) {
       setIsExpanded(false);
       document.body.removeEventListener('click', handleDocumentBodyClick);
     }
   }, []);
 
-  const handleActiveOptionClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-
+  const handleActiveOptionClick = useCallback(() => {
     if (ref.current) {
       setIsExpanded(prev => !prev);
     }
@@ -75,9 +73,9 @@ function Select<T>(props: Props<T>) {
     setOptionsStyle(getOptionsStyle(ref.current?.getBoundingClientRect()));
 
     if (isExpanded) {
-      document.body.removeEventListener('click', handleDocumentBodyClick);
-    } else {
       document.body.addEventListener('click', handleDocumentBodyClick);
+    } else {
+      document.body.removeEventListener('click', handleDocumentBodyClick);
     }
   }, [handleDocumentBodyClick, isExpanded]);
 
@@ -102,12 +100,13 @@ function Select<T>(props: Props<T>) {
 
               return (
                 <c.Option.Container.DependenciesContext.Provider
+                  key={index}
                   isActive={isActive}
                   option={x}
                   setActiveOption={setActiveOption}
                   setSelectIsExpanded={setIsExpanded}
                 >
-                  <Option<T> key={index} option={x} />
+                  <Option<T> option={x} />
                 </c.Option.Container.DependenciesContext.Provider>
               );
             })}

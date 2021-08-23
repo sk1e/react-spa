@@ -2,6 +2,8 @@
 @use 'sass:color';
 
 .button {
+  $r: &;
+
   overflow: hidden;
   position: relative;
   cursor: pointer;
@@ -12,8 +14,8 @@
   font-weight: 600;
   transition: 0.1s background-color, 0.1s color;
   user-select: none;
-  min-width: 90px;
   height: 35px;
+  min-width: 60px;
   border: none;
   border-radius: 4px;
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
@@ -35,14 +37,28 @@
   }
 
   &_variant {
-    &_primary {
-      @include colors.themed-color('accent-primary') using ($color) {
-        background: $color;
+    &_contained {
+      &#{$r}_color {
+        &_primary {
+          @include colors.themed-color('accent-primary') using ($color) {
+            background: $color;
+          }
+
+          &:hover {
+            @include colors.themed-color('accent-primary') using ($color) {
+              background: darken($color, 7%);
+            }
+          }
+        }
       }
+    }
+
+    &_text {
+      background: transparent;
 
       &:hover {
-        @include colors.themed-color('accent-primary') using ($color) {
-          background: darken($color, 7%);
+        @include colors.themed-bg(3) using ($color) {
+          background: $color;
         }
       }
     }

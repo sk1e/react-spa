@@ -42,6 +42,7 @@ function TextInput({ formElementState: { units, useMethods }, label }: Props) {
   return (
     <div className={b({ invalid: !isValid })}>
       <Text.Component
+        className={b('label')}
         typography="label-m"
         as="label"
         htmlFor={id}
@@ -56,7 +57,11 @@ function TextInput({ formElementState: { units, useMethods }, label }: Props) {
         onBlur={handleBlur}
         onChange={handleChange}
       />
-      {error && <Text.Component color="error">{error[lang]}</Text.Component>}
+      {error && (
+        <Text.Component className={b('error')} color="error">
+          {error[lang]}
+        </Text.Component>
+      )}
     </div>
   );
 }

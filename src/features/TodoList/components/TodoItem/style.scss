@@ -1,0 +1,31 @@
+@use "style/colors";
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 4px;
+
+  @include colors.themed-bg(3) using ($color) {
+    border-top: 1px solid $color;
+  }
+
+  &__left-part {
+    display: flex;
+    align-items: center;
+  }
+
+  &__right-part {
+    display: flex;
+    align-items: center;
+  }
+
+  &__text {
+    margin-left: 5px;
+  }
+
+  &__delete-button {
+    margin-left: 20px;
+    color: red;
+  }
+}

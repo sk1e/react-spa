@@ -9,13 +9,15 @@ import { Ripple } from './components';
 import './style.scss';
 
 export type Size = 's' | 'm' | 'l';
+export type Variant = 'contained' | 'outlined' | 'text';
 
 const b = block('button');
 
 type Props = {
   size?: Size;
   className?: string;
-  variant?: 'primary' | 'secondary';
+  color?: 'primary' | 'secondary';
+  variant?: Variant;
 } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'classname' | 'type'> &
   { [K in 'type']-?: React.ButtonHTMLAttributes<HTMLButtonElement>[K] };
 
@@ -23,7 +25,7 @@ const numbers = naturalNumbers();
 
 type RippleAnimation = {
   positionStyle: Ripple.PositionStyle;
-  id: number;
+  id: string;
 };
 
 const rippleStateStore = makeUnitStore<Ripple.State>();
@@ -34,10 +36,11 @@ const allAnimationsAreCompletedUnit = makeDerivedUnit(rippleStateStore).getUnit(
 
 function Button({
   size = 'm',
-  variant = 'primary',
+  color = 'primary',
   onMouseDown,
   children,
   className,
+  variant = 'contained',
   ...props
 }: React.PropsWithChildren<Props>) {
   const [rippleAnimations, setRippleAnimations] = useState<RippleAnimation[]>(
@@ -64,8 +67,7 @@ function Button({
         const rect = ref.current.getBoundingClientRect();
         const { left, top } = rect;
 
-        const id = numbers.next().value as number;
-
+        const id = numbers.next().value.toString();
         rippleStateStoreMethods.addUnit(id, 'active');
         setRippleAnimations(prev => [
           ...prev,
@@ -92,6 +94,7 @@ function Button({
         {
           size,
           variant,
+          color,
           'no-animations': rippleAnimations.length === 0,
         },
         [className],

@@ -12,8 +12,6 @@ const b = block('register-form');
 type Props = {};
 
 function RegisterForm({}: Props) {
-  console.log('>> render form');
-
   const form = useForm({
     firstName: c.FirstNameInput.formElementState,
     secondName: c.SecondNameInput.formElementState,

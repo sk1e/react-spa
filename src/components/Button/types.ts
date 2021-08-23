@@ -6,7 +6,7 @@ export type PositionStyle = {
 export type AnimationStatus = 'active' | 'finished';
 
 export type RippleAnimation = {
-  id: number;
+  id: string;
   positionStyle: PositionStyle;
   status: AnimationStatus;
 };

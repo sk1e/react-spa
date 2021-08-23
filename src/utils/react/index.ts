@@ -1,3 +1,3 @@
 export * as RequiredContext from './RequiredContext';
-export { makeComponentOfNestedComponents } from './makeComponentOfNestedComponents';
+export { composeContextProviders } from './composeContextProviders';
 export { withContextProviders } from './withContextProviders';

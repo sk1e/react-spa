@@ -29,8 +29,6 @@ function TabPanel<T extends string>({
     [tabs, activeTab],
   );
 
-  console.log('>> index', activeTabIndex);
-
   return (
     <div className={b()}>
       <div className={b('tabs')}>

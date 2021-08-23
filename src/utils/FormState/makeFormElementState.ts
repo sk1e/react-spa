@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Translations, Validator } from 'types';
 import { makePrimaryUnit, makeDerivedUnit } from 'utils/State';
 
-import { makeComponentOfNestedComponents } from '../react/makeComponentOfNestedComponents';
+import { composeContextProviders } from '../react';
 import { FormElementState } from './FormElementState';
 
 export function makeFormElementState<T>(
@@ -72,7 +72,7 @@ export function makeFormElementState<T>(
         changeVisited,
       };
     },
-    ContextProvider: makeComponentOfNestedComponents(
+    ContextProvider: composeContextProviders(
       valueUnit.ContextProvider,
       errorUnit.ContextProvider,
       isValidUnit.ContextProvider,

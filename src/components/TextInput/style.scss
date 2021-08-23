@@ -3,12 +3,15 @@
 
 .text-input {
   $r: &;
+  position: relative;
+  padding-bottom: 20px;
 
   &__input {
     display: block;
     background: transparent;
     padding: 3px;
     border-radius: 3px;
+    margin-top: 3px;
 
     @include colors.themed-color('fg-primary') using ($color) {
       color: $color;
@@ -35,5 +38,10 @@
         border: 1px solid $color;
       }
     }
+  }
+
+  &__error {
+    position: absolute;
+    bottom: 0;
   }
 }

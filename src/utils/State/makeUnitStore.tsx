@@ -84,15 +84,26 @@ export function makeUnitStore<T>(): UnitStore<T> {
         useState: () => {
           const [state, setState] = useState(storeState.current[id]);
 
-          useEffect(() => subscribeUnit(id, s => setState(s)), []);
+          useEffect(
+            () =>
+              subscribeUnit(id, s => {
+                setState(s);
+              }),
+            [],
+          );
 
           return state;
         },
-        useSetState: () => (value: React.SetStateAction<T>) =>
+        useSetState: () => (value: React.SetStateAction<T>) => {
+          const newState = getNewState(value, storeState.current[id]);
+
           setStoreState(prev => ({
             ...prev,
-            [id]: getNewState(value, prev[id]),
-          })),
+            [id]: newState,
+          }));
+
+          unitSubscribers.current[id].forEach(f => f(newState));
+        },
       };
     };
 

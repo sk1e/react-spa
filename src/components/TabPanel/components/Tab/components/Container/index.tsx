@@ -18,7 +18,7 @@ type Props = {};
 
 type RippleAnimation = {
   positionStyle: Ripple.PositionStyle;
-  id: number;
+  id: string;
 };
 
 const rippleStateStore = makeUnitStore<Ripple.State>();
@@ -63,7 +63,7 @@ function Container({ children }: React.PropsWithChildren<Props>) {
         const rect = ref.current.getBoundingClientRect();
         const { left, top } = rect;
 
-        const id = numbers.next().value as number;
+        const id = numbers.next().value.toString();
 
         rippleStateStoreMethods.addUnit(id, 'active');
         setRippleAnimations(prev => [

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   createRequiredContext,
@@ -25,13 +25,13 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
     const state = useRef<T>(initialState);
     const subscribers = useRef<Array<StateSubscriber<T>>>([]);
 
-    const subscribe = (subscriber: StateSubscriber<T>) => {
+    const subscribe = useCallback((subscriber: StateSubscriber<T>) => {
       subscribers.current.push(subscriber);
 
       return () => {
         subscribers.current = subscribers.current.filter(x => x !== subscriber);
       };
-    };
+    }, []);
 
     const setState = (value: React.SetStateAction<T>) => {
       state.current = getNewState(value, state.current);
@@ -54,11 +54,17 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
     SubscribeContext,
     useState: () => {
       const { subscribe } = useRequiredContext(SubscribeContext);
+      const { getState } = useRequiredContext(PrivateStateContext);
 
-      const [state, setState] = useState<T>(initialState);
+      const [state, setState] = useState<T>(getState);
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      useEffect(() => subscribe(s => setState(s)), []);
+      useEffect(
+        () =>
+          subscribe(s => {
+            setState(s);
+          }),
+        [subscribe],
+      );
 
       return state;
     },

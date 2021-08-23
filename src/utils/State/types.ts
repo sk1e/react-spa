@@ -2,7 +2,8 @@ import React from 'react';
 
 import { CustomContext } from '../react/RequiredContext';
 
-export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
+export type SetState<T> = (arg: SetStateArg<T>) => void;
+export type SetStateArg<T> = React.SetStateAction<T>;
 
 export type StateSubscriber<T> = (state: T) => void;
 
@@ -31,7 +32,7 @@ export type PrimaryStateUnit<T> = StateUnit<T> & {
   useSetState(): SetState<T>;
 };
 
-export type ID = string | number;
+export type ID = string;
 
 type StoreMethods<T> = {
   addUnit(id: ID, initialState: T): void;
