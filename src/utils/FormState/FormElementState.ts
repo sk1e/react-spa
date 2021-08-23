@@ -13,5 +13,6 @@ export type FormElementState<T> = {
   useMethods(): {
     changeValue(newValue: T): void;
     changeVisited(newValue: boolean): void;
+    validate(): boolean;
   };
 };

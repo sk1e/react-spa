@@ -35,14 +35,19 @@ export function makeFormElementState<T>(
       ];
 
       const validateValue = useCallback(
-        (value: T, validator: Validator<T>) => {
+        (value: T, validator: Validator<T>): boolean => {
           const validationResult = validator.validate(value);
 
           if (validationResult.kind === 'invalid') {
             setError(validationResult.message);
-          } else if (validationResult.kind === 'valid') {
+            return false;
+          }
+
+          if (validationResult.kind === 'valid') {
             setError(null);
           }
+
+          return true;
         },
         [setError],
       );
@@ -67,9 +72,19 @@ export function makeFormElementState<T>(
         [getValueState, setVisited, validateValue],
       );
 
+      const validate = useCallback((): boolean => {
+        if (validator) {
+          const value = getValueState();
+          return validateValue(value, validator);
+        }
+
+        return true;
+      }, [getValueState, validateValue]);
+
       return {
         changeValue,
         changeVisited,
+        validate,
       };
     },
     ContextProvider: composeContextProviders(

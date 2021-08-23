@@ -3,6 +3,7 @@ import { useCallback, useMemo } from 'react';
 
 import { FormElementState } from './FormElementState';
 import { isFormElementState } from './isFormElementState';
+import { makeFormElementState } from './makeFormElementState';
 
 type FormDataOf<Elements> = {
   [P in keyof Elements]: Elements[P] extends FormElementState<infer T>
@@ -55,6 +56,13 @@ function useResetFormState(
   return () => resetters.forEach(f => f());
 }
 
+function useValidateForm(
+  formElements: Array<FormElementState<any>>,
+): () => boolean {
+  const validators = formElements.map(x => x.useMethods().validate);
+  return () => validators.every(f => f());
+}
+
 export function useForm<T extends Record<string, any>>(
   formElements: T,
   { resetOnSubmit = true }: UseFormOptions = {},
@@ -67,16 +75,19 @@ export function useForm<T extends Record<string, any>>(
     [formElements],
   );
   const resetForm = useResetFormState(formElementsArray);
+  const validateForm = useValidateForm(formElementsArray);
 
   const makeSubmitHandler = useCallback(
     (handleSubmit: (data: FormDataOf<T>) => void) =>
       (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        handleSubmit(getFormElementsState(formElementsGetState));
+        if (validateForm()) {
+          handleSubmit(getFormElementsState(formElementsGetState));
 
-        if (resetOnSubmit) {
-          resetForm();
+          if (resetOnSubmit) {
+            resetForm();
+          }
         }
       },
     [formElementsGetState, resetOnSubmit, resetForm],
