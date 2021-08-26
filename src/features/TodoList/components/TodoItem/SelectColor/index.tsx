@@ -6,6 +6,7 @@ import { Todo, TodoColor } from 'types';
 import { UnitRenderInterface } from 'utils/State';
 import { block } from 'utils/classname';
 
+import { colors } from '../../../constants';
 import './style.scss';
 
 type Props = {
@@ -30,7 +31,11 @@ function Option({ option }: Select.Option.Props<Todo['color']>) {
 
   return (
     <Select.Option.Container.DefaultComponent>
-      <Text.Component weight="bold" style={{ color }} className={b('option')}>
+      <Text.Component
+        weight="bold"
+        tagProps={{ style: { color } }}
+        className={b('option')}
+      >
         {option || ' '}
       </Text.Component>
     </Select.Option.Container.DefaultComponent>
@@ -44,7 +49,7 @@ function ActiveOption({ option }: Select.Option.Props<Todo['color']>) {
     <Select.ActiveOption.Container.DefaultComponent>
       <Text.Component
         weight="bold"
-        style={{ color }}
+        tagProps={{ style: { color } }}
         className={b('active-option')}
       >
         {option}
@@ -69,14 +74,7 @@ const lightThemeColorMap: Record<TodoColor, string> = {
   red: 'red',
 };
 
-const options: Array<Todo['color']> = [
-  'blue',
-  'green',
-  'orange',
-  'purple',
-  'red',
-  undefined,
-];
+const options: Array<Todo['color']> = [...colors, undefined];
 
 function SelectColor({ activeColorState }: Props) {
   return (

@@ -3,7 +3,6 @@ import { useCallback, useMemo } from 'react';
 
 import { FormElementState } from './FormElementState';
 import { isFormElementState } from './isFormElementState';
-import { makeFormElementState } from './makeFormElementState';
 
 type FormDataOf<Elements> = {
   [P in keyof Elements]: Elements[P] extends FormElementState<infer T>
@@ -90,7 +89,7 @@ export function useForm<T extends Record<string, any>>(
           }
         }
       },
-    [formElementsGetState, resetOnSubmit, resetForm],
+    [validateForm, formElementsGetState, resetOnSubmit, resetForm],
   );
 
   return {

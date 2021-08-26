@@ -16,7 +16,8 @@ export type Props<T extends TS.Tag> = {
   className?: string;
   weight?: TS.Weight;
   align?: TS.Align;
-} & JSX.IntrinsicElements[T];
+  tagProps?: JSX.IntrinsicElements[T];
+};
 
 function Text<T extends TS.Tag>(props: React.PropsWithChildren<Props<T>>) {
   const {
@@ -27,14 +28,14 @@ function Text<T extends TS.Tag>(props: React.PropsWithChildren<Props<T>>) {
     weight = 'normal',
     align = 'left',
     children,
-    ...restProps
+    tagProps,
   } = props;
 
   return React.createElement(
     as,
     {
       className: classnames(className, b({ typography, color, weight, align })),
-      ...restProps,
+      ...tagProps,
     },
     children,
   );

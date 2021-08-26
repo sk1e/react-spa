@@ -1,0 +1,11 @@
+.filter-by-status {
+  display: block;
+
+  &__radio {
+    margin-top: 10px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}

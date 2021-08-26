@@ -1,0 +1,42 @@
+@use "style/colors";
+
+.radio {
+  $r: &;
+
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &__circle {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+    @include colors.themed-color('accent-primary') using ($color) {
+      border: 2px solid $color;
+    }
+  }
+
+  &__inner-circle {
+    width: 0px;
+    height: 0px;
+    border-radius: 50%;
+    transition: width 300ms, height 300ms;
+
+    @include colors.themed-color('accent-primary') using ($color) {
+      background: $color;
+    }
+
+    #{$r}_active & {
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  &__label {
+    margin-left: 10px;
+  }
+}

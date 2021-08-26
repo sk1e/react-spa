@@ -7,7 +7,7 @@ import { block } from 'utils/classname';
 import { naturalNumbers } from 'utils/math';
 import { withContextProviders } from 'utils/react';
 
-import { TodoItem, TodoForm } from './components';
+import { TodoItem, TodoForm, ControlPanel } from './components';
 import './style.scss';
 
 const b = block('todo-list');
@@ -16,21 +16,20 @@ type Props = {};
 
 const todoStore = makeUnitStore<Todo>();
 
-const sortedTodos = makeDerivedUnit(todoStore).getUnit(todos =>
-  R.sortBy(x => x.id, Object.values(todos)),
-);
+const sortedTodos = makeDerivedUnit(todoStore).getUnit(todos => {
+  return R.sortBy(x => x.id, Object.values(todos));
+}, 'sorted');
 
 const numbers = naturalNumbers();
+
+const remaingingTodos = makeDerivedUnit(todoStore).getUnit(
+  todos => Object.values(todos).filter(x => x.status === 'active').length,
+);
 
 function TodoList({}: Props) {
   const todos = sortedTodos.useState();
   const { addUnit, getUnit } = todoStore.useMethods();
   const setTodoStore = todoStore.useSetState();
-
-  // const handleTodoAdd = useCallback((todoText: string) => {
-  //   const id = numbers.next().value?.toString() as string;
-  //   addUnit(id, { id, status: 'active', text: todoText })
-  // }, [addUnit])
 
   const handleTodoFormSubmit = useCallback(
     (data: TodoForm.TodoFormData) => {
@@ -47,6 +46,16 @@ function TodoList({}: Props) {
     [setTodoStore],
   );
 
+  const handleClearCompletedButtonClick = useCallback(() => {
+    setTodoStore(prev =>
+      R.pickBy((val: Todo) => val.status !== 'completed', prev),
+    );
+  }, [setTodoStore]);
+
+  const handleMarkAllCompletedButtonClick = useCallback(() => {
+    setTodoStore(prev => R.map(x => ({ ...x, status: 'completed' }), prev));
+  }, [setTodoStore]);
+
   return (
     <div className={b()}>
       <TodoForm.Component onSubmit={handleTodoFormSubmit} />
@@ -59,10 +68,21 @@ function TodoList({}: Props) {
           />
         ))}
       </div>
+      <ControlPanel.Component
+        onClearCompletedButtonClick={handleClearCompletedButtonClick}
+        onMarkAllCompletedButtonClick={handleMarkAllCompletedButtonClick}
+        useRemainingTodos={remaingingTodos.useState}
+      />
     </div>
   );
 }
 
 export const Component = withContextProviders(TodoList, [
   todoStore.ContextProvider,
+  sortedTodos.ContextProvider,
+  sortedAndFilteredTodos.ContextProvider,
+  remaingingTodos.ContextProvider,
+  ControlPanel.statusFilterUnit.ContextProvider,
+  ControlPanel.FilterContextProvider,
+  // ControlPanel.todoFilterPredicateUnit.ContextProvider,
 ]);

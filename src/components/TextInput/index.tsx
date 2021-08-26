@@ -45,8 +45,8 @@ function TextInput({ formElementState: { units, useMethods }, label }: Props) {
         className={b('label')}
         typography="label-m"
         as="label"
-        htmlFor={id}
         color={isValid ? 'primary' : 'error'}
+        tagProps={{ htmlFor: id }}
       >
         {label[lang]}
       </Text.Component>
