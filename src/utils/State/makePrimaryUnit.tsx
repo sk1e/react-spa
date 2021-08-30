@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import { naturalNumbers } from 'utils/math';
 
 import {
   createRequiredContext,
@@ -7,23 +15,32 @@ import {
 import { getNewState } from './getNewState';
 import {
   StateSubscriber,
-  SubscribeContextData,
   PrimaryStateUnit,
   StateUnitWriteContextData,
+  GenericStateSubscriber,
 } from './types';
 
 type PrivateContextData<T> = {
+  subscribe(handler: (state: T) => void): () => void;
   getState(): T;
+  id: string;
 } & StateUnitWriteContextData<T>;
+
+const numbers = naturalNumbers();
 
 export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
   const PrivateStateContext = createRequiredContext<PrivateContextData<T>>();
 
-  const SubscribeContext = createRequiredContext<SubscribeContextData<T>>();
+  const genericSubscribers: Array<GenericStateSubscriber<T>> = [];
+
+  const addGenericSubscriber = (subscriber: GenericStateSubscriber<T>) => {
+    genericSubscribers.push(subscriber);
+  };
 
   function ContextProvider({ children }: React.PropsWithChildren<{}>) {
     const state = useRef<T>(initialState);
     const subscribers = useRef<Array<StateSubscriber<T>>>([]);
+    const id = useMemo(() => numbers.next().value.toString(), []);
 
     const subscribe = useCallback((subscriber: StateSubscriber<T>) => {
       subscribers.current.push(subscriber);
@@ -34,27 +51,31 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
     }, []);
 
     const setState = (value: React.SetStateAction<T>) => {
-      state.current = getNewState(value, state.current);
-      subscribers.current.forEach(f => f(state.current));
+      const newState = getNewState(value, state.current);
+      state.current = newState;
+      subscribers.current.forEach(f => f(newState));
+      genericSubscribers.forEach(f => f(newState, id));
     };
 
     const getState = () => state.current;
 
     return (
-      <SubscribeContext.Provider subscribe={subscribe}>
-        <PrivateStateContext.Provider getState={getState} setState={setState}>
-          {children}
-        </PrivateStateContext.Provider>
-      </SubscribeContext.Provider>
+      <PrivateStateContext.Provider
+        getState={getState}
+        setState={setState}
+        subscribe={subscribe}
+        id={id}
+      >
+        {children}
+      </PrivateStateContext.Provider>
     );
   }
 
   return {
+    kind: 'primary',
     initialState,
-    SubscribeContext,
     useState: () => {
-      const { subscribe } = useRequiredContext(SubscribeContext);
-      const { getState } = useRequiredContext(PrivateStateContext);
+      const { getState, subscribe } = useRequiredContext(PrivateStateContext);
 
       const [state, setState] = useState<T>(getState);
 
@@ -75,5 +96,9 @@ export function makePrimaryUnit<T>(initialState: T): PrimaryStateUnit<T> {
       return useRequiredContext(PrivateStateContext).getState;
     },
     ContextProvider,
+    addSubscriber: addGenericSubscriber,
+    useID: () => {
+      return useRequiredContext(PrivateStateContext).id;
+    },
   };
 }

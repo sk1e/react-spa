@@ -1,0 +1,12 @@
+.checkbox-label {
+  &__marker-and-label {
+    display: flex;
+    align-items: center;
+  }
+
+  &__marker {
+    margin-right: 5px;
+    width: 20px;
+    height: 10px;
+  }
+}

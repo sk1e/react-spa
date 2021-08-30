@@ -1,11 +1,11 @@
 import { Translations } from 'types';
-import { PrimaryStateUnit, StateUnit } from 'utils/State';
+import { PrimaryStateUnit, DerivedStateUnit } from 'utils/State';
 
 export type FormElementState<T> = {
   kind: 'form-element-state';
   units: {
     value: PrimaryStateUnit<T>;
-    isValid: StateUnit<boolean>;
+    isValid: DerivedStateUnit<boolean>;
     error: PrimaryStateUnit<Translations | null>;
     visited: PrimaryStateUnit<boolean>;
   };

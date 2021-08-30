@@ -117,5 +117,4 @@ function Button({
 
 export const Component = withContextProviders(Button, [
   rippleStateStore.ContextProvider,
-  allAnimationsAreCompletedUnit.ContextProvider,
 ]);

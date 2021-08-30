@@ -5,10 +5,13 @@ import { block } from 'utils/classname';
 import * as c from './components';
 import './style.scss';
 
-export { statusFilterUnit } from './components/FilterByStatus';
 export {
-  todoFilterPredicateUnit,
-  FilterContextProvider,
+  statusFilterPredicateUnit,
+  statusFilterUnit,
+} from './components/FilterByStatus';
+export {
+  colorFilterPredicateUnit,
+  ColorFilterPredicateContextProvider,
   stateUnits as colorStateUnits,
 } from './components/FilterByColor';
 

@@ -102,5 +102,4 @@ function Container({ children }: React.PropsWithChildren<Props>) {
 
 export const DefaultComponent = withContextProviders(Container, [
   rippleStateStore.ContextProvider,
-  allAnimationsAreCompletedUnit.ContextProvider,
 ]);

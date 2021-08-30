@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+
+import { naturalNumbers } from 'utils/math';
 
 import {
   createRequiredContext,
@@ -7,24 +9,35 @@ import {
 import { getNewState } from './getNewState';
 import {
   ID,
-  SubscribeContextData,
   UnitStore,
   StateUnitWriteContextData,
   UnitRenderInterface,
+  SubscribeContextData,
+  GenericStateSubscriber,
 } from './types';
 
 type StoreSubscriber<T> = (state: Record<ID, T>) => void;
 type InstanceSubscriber<T> = (state: T) => void;
 
-type StoreData<T> = StateUnitWriteContextData<Record<ID, T>> & {
-  addUnit(id: ID, initialState: T): void;
-  getUnit(id: ID): UnitRenderInterface<T>;
-};
+type StoreData<T> = StateUnitWriteContextData<Record<ID, T>> &
+  SubscribeContextData<Record<ID, T>> & {
+    id: string;
+    addUnit(id: ID, initialState: T): void;
+    getUnit(id: ID): UnitRenderInterface<T>;
+  };
+
+const numbers = naturalNumbers();
 
 export function makeUnitStore<T>(): UnitStore<T> {
   const StoreContext = createRequiredContext<StoreData<T>>();
-  const SubscribeContext =
-    createRequiredContext<SubscribeContextData<Record<ID, T>>>();
+
+  const genericSubscribers: Array<GenericStateSubscriber<Record<ID, T>>> = [];
+
+  const addGenericSubscriber = (
+    subscriber: GenericStateSubscriber<Record<ID, T>>,
+  ) => {
+    genericSubscribers.push(subscriber);
+  };
 
   function ContextProvider({ children }: React.PropsWithChildren<{}>) {
     const storeState = useRef<Record<ID, T>>({});
@@ -32,6 +45,8 @@ export function makeUnitStore<T>(): UnitStore<T> {
       {},
     );
     const storeSubscribers = useRef<Array<StoreSubscriber<T>>>([]);
+
+    const id = useMemo(() => numbers.next().value.toString(), []);
 
     const subscribeStore = (subscriber: StoreSubscriber<T>): (() => void) => {
       storeSubscribers.current.push(subscriber);
@@ -58,8 +73,10 @@ export function makeUnitStore<T>(): UnitStore<T> {
     };
 
     const setStoreState = (value: React.SetStateAction<Record<ID, T>>) => {
-      storeState.current = getNewState(value, storeState.current);
-      storeSubscribers.current.forEach(f => f(storeState.current));
+      const newState = getNewState(value, storeState.current);
+      storeState.current = newState;
+      storeSubscribers.current.forEach(f => f(newState));
+      genericSubscribers.forEach(f => f(newState, id));
     };
 
     const setStoreStatePublic = (
@@ -68,12 +85,16 @@ export function makeUnitStore<T>(): UnitStore<T> {
       const newState = getNewState(value, storeState.current);
 
       const updatedProperties = Object.entries(storeState.current)
-        .filter(([key, value]) => newState[key] !== value)
+        .filter(
+          ([key, value]) =>
+            newState[key] !== value && newState[key] !== undefined,
+        )
         .map(([key]) => key);
 
       storeState.current = newState;
 
       storeSubscribers.current.forEach(f => f(newState));
+      genericSubscribers.forEach(f => f(newState, id));
       updatedProperties.forEach(prop =>
         unitSubscribers.current[prop].forEach(f => f(newState[prop])),
       );
@@ -113,23 +134,27 @@ export function makeUnitStore<T>(): UnitStore<T> {
     };
 
     return (
-      <SubscribeContext.Provider subscribe={subscribeStore}>
-        <StoreContext.Provider
-          addUnit={addUnit}
-          getUnit={getUnit}
-          setState={setStoreStatePublic}
-        >
-          {children}
-        </StoreContext.Provider>
-      </SubscribeContext.Provider>
+      <StoreContext.Provider
+        subscribe={subscribeStore}
+        addUnit={addUnit}
+        getUnit={getUnit}
+        setState={setStoreStatePublic}
+        id={id}
+      >
+        {children}
+      </StoreContext.Provider>
     );
   }
 
   return {
-    SubscribeContext,
+    kind: 'primary',
+    addSubscriber: addGenericSubscriber,
+    useID: () => {
+      return useRequiredContext(StoreContext).id;
+    },
     initialState: {},
     useState: () => {
-      const { subscribe } = useRequiredContext(SubscribeContext);
+      const { subscribe } = useRequiredContext(StoreContext);
 
       const [state, setState] = useState<Record<ID, T>>({});
 

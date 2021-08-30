@@ -11,6 +11,7 @@ import { block } from 'utils/classname';
 import { composeContextProviders } from 'utils/react';
 
 import { colors } from '../../../../constants';
+import * as CheckboxLabel from './CheckboxLabel';
 import './style.scss';
 
 const b = block('filter-by-color');
@@ -29,27 +30,33 @@ const unitEntries = Object.entries(stateUnits);
 const units = unitEntries.map(([, value]) => value);
 const unitKeys = unitEntries.map(([key]) => key);
 
-export const todoFilterPredicateUnit = makeDerivedUnit(...units).getUnit(
+export const colorFilterPredicateUnit = makeDerivedUnit(...units).getUnit(
   (...args) => {
-    return (x: Todo) =>
-      args.length === 0
+    return (x: Todo) => {
+      return args.every(x => x === false)
         ? true
         : unitKeys
             .filter((_, index) => args[index])
             .includes(x.color as string);
+    };
   },
 );
 
-export const FilterContextProvider = composeContextProviders(
+export const ColorFilterPredicateContextProvider = composeContextProviders(
   ...Object.values(stateUnits).map(x => x.ContextProvider),
-  todoFilterPredicateUnit.ContextProvider,
 );
 
 function FilterByColor({}: Props) {
   return (
     <div className={b()}>
       {colors.map(x => (
-        <Checkbox.Component checkState={stateUnits[x]} key={x} />
+        <Checkbox.Component
+          className={b('checkbox')}
+          checkState={stateUnits[x]}
+          key={x}
+          label={x}
+          Label={CheckboxLabel.Component}
+        />
       ))}
     </div>
   );

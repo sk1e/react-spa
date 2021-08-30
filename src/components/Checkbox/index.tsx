@@ -5,15 +5,26 @@ import React, { useCallback } from 'react';
 import { UnitRenderInterface } from 'utils/State';
 import { block } from 'utils/classname';
 
+import * as c from './components';
 import './style.scss';
+
+export { Label } from './components';
 
 const b = block('checkbox');
 
-type Props = {
+type Props<T> = {
+  className?: string;
   checkState: UnitRenderInterface<boolean>;
+  label?: T;
+  Label?: React.ComponentType<c.Label.Props<T>>;
 };
 
-function Checkbox({ checkState }: Props) {
+function Checkbox<T>({
+  checkState,
+  Label = c.Label.DefaultComponent,
+  label,
+  className,
+}: Props<T>) {
   const [checked, setChecked] = [
     checkState.useState(),
     checkState.useSetState(),
@@ -24,10 +35,13 @@ function Checkbox({ checkState }: Props) {
   }, [setChecked]);
 
   return (
-    <div className={b({ checked })} onClick={handleCheckboxClick}>
-      <div className={b('check')}>
-        <FontAwesomeIcon icon={faCheck} />
+    <div className={b({ checked }, [className])} onClick={handleCheckboxClick}>
+      <div className={b('box')}>
+        <div className={b('check')}>
+          <FontAwesomeIcon icon={faCheck} />
+        </div>
       </div>
+      {label && <Label label={label} />}
     </div>
   );
 }

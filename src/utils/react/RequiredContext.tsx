@@ -14,11 +14,10 @@ export type CustomContext<T extends Record<string, any>> = {
   Provider: React.MemoExoticComponent<React.FunctionComponent<T>>;
 };
 
-export function createRequiredContext<T extends Record<string, any>>(
-  displayName?: string,
-): CustomContext<T> {
+export function createRequiredContext<
+  T extends Record<string, any>,
+>(): CustomContext<T> {
   const context = createContext<T | Uninitialized>(uninitializedContextData);
-  context.displayName = displayName;
 
   return {
     context,

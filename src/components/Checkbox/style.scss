@@ -3,18 +3,22 @@
 .checkbox {
   $r: &;
 
-  width: fit-content;
-  padding: 2px;
   cursor: pointer;
-  border-radius: 3px;
+  display: flex;
+  align-items: center;
 
-  @include colors.themed-bg(3) using ($color) {
-    border: 2px solid $color;
-  }
+  &__box {
+    padding: 2px;
+    border-radius: 3px;
 
-  &_checked {
-    @include colors.themed-color('accent-primary') using ($color) {
-      background: $color;
+    @include colors.themed-bg(3) using ($color) {
+      border: 2px solid $color;
+    }
+
+    #{$r}_checked & {
+      @include colors.themed-color('accent-primary') using ($color) {
+        background: $color;
+      }
     }
   }
 

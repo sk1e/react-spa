@@ -20,6 +20,16 @@ const sortedTodos = makeDerivedUnit(todoStore).getUnit(todos => {
   return R.sortBy(x => x.id, Object.values(todos));
 }, 'sorted');
 
+const filteredAndSortedTodos = makeDerivedUnit(
+  sortedTodos,
+  ControlPanel.colorFilterPredicateUnit,
+  ControlPanel.statusFilterPredicateUnit,
+).getUnit(
+  (todos, colorPredicate, statusPredicate) =>
+    todos.filter(colorPredicate).filter(statusPredicate),
+  'filtered and sorted',
+);
+
 const numbers = naturalNumbers();
 
 const remaingingTodos = makeDerivedUnit(todoStore).getUnit(
@@ -27,7 +37,8 @@ const remaingingTodos = makeDerivedUnit(todoStore).getUnit(
 );
 
 function TodoList({}: Props) {
-  const todos = sortedTodos.useState();
+  const todos = filteredAndSortedTodos.useState();
+
   const { addUnit, getUnit } = todoStore.useMethods();
   const setTodoStore = todoStore.useSetState();
 
@@ -79,10 +90,6 @@ function TodoList({}: Props) {
 
 export const Component = withContextProviders(TodoList, [
   todoStore.ContextProvider,
-  sortedTodos.ContextProvider,
-  sortedAndFilteredTodos.ContextProvider,
-  remaingingTodos.ContextProvider,
   ControlPanel.statusFilterUnit.ContextProvider,
-  ControlPanel.FilterContextProvider,
-  // ControlPanel.todoFilterPredicateUnit.ContextProvider,
+  ControlPanel.ColorFilterPredicateContextProvider,
 ]);

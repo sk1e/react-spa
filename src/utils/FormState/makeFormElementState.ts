@@ -90,7 +90,6 @@ export function makeFormElementState<T>(
     ContextProvider: composeContextProviders(
       valueUnit.ContextProvider,
       errorUnit.ContextProvider,
-      isValidUnit.ContextProvider,
       visitedUnit.ContextProvider,
     ),
   };
