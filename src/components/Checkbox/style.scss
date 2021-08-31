@@ -25,7 +25,7 @@
   &__check {
     visibility: hidden;
 
-    @include colors.themed-color('fg-primary') using ($color) {
+    @include colors.themed-color('fg-on-accent-primary') using ($color) {
       color: $color;
     }
 

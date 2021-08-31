@@ -26,6 +26,9 @@
 
   &__delete-button {
     margin-left: 20px;
-    color: red;
+
+    @include colors.themed-color('danger') using ($color) {
+      color: $color;
+    }
   }
 }

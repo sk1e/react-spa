@@ -9,7 +9,9 @@ $colors: (
     'fg-secondary': #aaa,
     'fg-error': #ee2b2b,
     'fg-accent': #adff2f,
+    'fg-on-accent-primary': #eee,
     'accent-primary': #7029f5,
+    'danger': #ee2b2b,
   ),
   'light': (
     'bg': #f2f2f2,
@@ -17,7 +19,9 @@ $colors: (
     'fg-secondary': #404040,
     'fg-error': #ee2b2b,
     'fg-accent': #4169e1,
+    'fg-on-accent-primary': #eee,
     'accent-primary': #1f8fff,
+    'danger': #ee2b2b,
   ),
 );
 
