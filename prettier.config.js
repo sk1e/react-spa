@@ -16,8 +16,6 @@ function srcContent() {
   return `^(?:${groups})/?.*$`;
 }
 
-console.log(srcContent());
-
 module.exports = {
   trailingComma: 'all',
   tabWidth: 2,
