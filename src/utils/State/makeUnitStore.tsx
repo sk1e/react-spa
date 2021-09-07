@@ -58,6 +58,14 @@ export function makeUnitStore<T>(): UnitStore<T> {
       };
     };
 
+    useEffect(() => {
+      return () => {
+        genericSubscribers.forEach(f => f({}, id));
+        storeSubscribers.current.forEach(f => f({}));
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const subscribeUnit = (
       id: ID,
       handler: (state: T) => void,
