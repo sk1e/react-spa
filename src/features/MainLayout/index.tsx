@@ -35,6 +35,4 @@ function MainLayout({ children, TabPanel }: React.PropsWithChildren<Props>) {
   );
 }
 
-const Component = React.memo(MainLayout);
-
-export { Component as MainLayout };
+export const Component = React.memo(MainLayout);
