@@ -22,4 +22,5 @@ function App() {
 
 export default withContextProviders(App, [
   globalFeatures.SwitchTheme.themeStateUnit.ContextProvider,
+  globalFeatures.IDProvider.Component,
 ]);

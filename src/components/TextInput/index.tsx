@@ -1,10 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 
-import { Language } from 'features/global';
+import { Language, IDProvider } from 'features/global';
 import { Translations } from 'types';
 import { FormElementState } from 'utils/FormState';
 import { block } from 'utils/classname';
-import { naturalNumbers } from 'utils/math';
 
 import * as Text from '../Text';
 import './style.scss';
@@ -16,15 +15,13 @@ export type Props = {
   formElementState: FormElementState<string>;
 };
 
-const numbers = naturalNumbers();
-
 function TextInput({ formElementState: { units, useMethods }, label }: Props) {
   const value = units.value.useState();
   const error = units.error.useState();
   const isValid = units.isValid.useState();
   const { changeValue, changeVisited } = useMethods();
 
-  const id = useMemo(() => `text-input-${numbers.next().value}`, []);
+  const id = IDProvider.useID('text-input');
 
   const lang = Language.activeLangStateUnit.useState();
 
