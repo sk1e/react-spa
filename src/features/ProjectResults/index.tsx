@@ -23,11 +23,7 @@ function ProjectResults({ project }: Props) {
       {project.resultWidgets
         .filter(x => x.type === 'chart')
         .map(x => (
-          <ChartWidget.Component
-            key={x.uuid}
-            widget={x}
-            projectID={project.uuid}
-          />
+          <ChartWidget.Component key={x.uuid} widget={x} project={project} />
         ))}
     </div>
   );

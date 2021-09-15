@@ -18,10 +18,22 @@ export type ChartWidgetDescriptor = {
   yVarType: string;
   seriesVar: string;
   colorScheme: string;
+  filter?: ChartWidgetDescriptorFilter;
   options?: Partial<{
     shrinkCat: boolean;
     shrinkCatLimit: number;
     shrinkCatShow: boolean;
     shrinkCatTitle: MultilingString;
   }>;
+};
+
+export type FilterRange = {
+  from: number;
+  to: number;
+};
+
+export type UUID = string;
+
+export type ChartWidgetDescriptorFilter = {
+  answers: Record<UUID, FilterRange>;
 };

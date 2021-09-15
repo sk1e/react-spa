@@ -46,6 +46,7 @@ type InputData = {
   xVar: string;
   yVar: string;
   lang: string;
+  answers?: Array<Record<string, any>>;
 };
 
 export const getChartData = makeRequest<InputData, APIOutputData, ChartData>(

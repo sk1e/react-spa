@@ -17,6 +17,7 @@ export const activeLangStateUnit: LangUnit = {
     throw Error('not implemented');
   },
   useState: (): Language => {
+    // TODO perf, subcsribe to route changes and notify only on language change
     const match = useRouteMatch<{ lang: Language }>();
     return match.params.lang;
   },
@@ -25,7 +26,7 @@ export const activeLangStateUnit: LangUnit = {
     const history = useHistory();
 
     return ((lang: Language) => {
-      const res = generatePath(match.path, { lang });
+      const res = generatePath(match.path, { ...match.params, lang });
       history.replace(res);
     }) as SetState<Language>; // TODO add full implementation
   },

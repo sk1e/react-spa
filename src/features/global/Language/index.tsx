@@ -8,6 +8,7 @@ import { activeLangStateUnit } from './activeLangStateUnit';
 import './style.scss';
 
 export { useTranslation } from './useTranslation';
+export { useGetMultilingTranslation } from './useGetMultilingTranslation';
 export { activeLangStateUnit } from './activeLangStateUnit';
 
 const b = block('switch-lang');

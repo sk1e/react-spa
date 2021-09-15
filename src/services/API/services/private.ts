@@ -23,7 +23,12 @@ export function makeRequest<
     switch (method) {
       case 'get':
         return (input: Input) => {
-          const params = new URLSearchParams(input).toString();
+          const params = new URLSearchParams(
+            Object.entries(input).map(([key, value]) => [
+              key,
+              typeof value === 'object' ? JSON.stringify(value) : value,
+            ]),
+          ).toString();
           return `/services/${name}/?${params}`;
         };
       default:

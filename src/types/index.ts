@@ -8,3 +8,4 @@ export * from './ChartData';
 export * from './ProjectListProject';
 export * from './Project';
 export * from './Widget';
+export * from './Question';

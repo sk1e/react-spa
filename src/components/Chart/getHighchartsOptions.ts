@@ -2,17 +2,22 @@ import {
   PointOptionsObject,
   SeriesPieOptions,
   Options as HighchartsOptions,
-  SeriesHistogramOptions,
+  SeriesColumnOptions,
 } from 'highcharts';
 
 import { ChartData, ChartType } from 'types';
 
-type ChartKind = 'pie' | 'histogram';
+type Args = {
+  data: ChartData;
+  type: ChartType;
+  xAxisTitle?: string;
+};
 
-export function getHighchartOptions(
-  data: ChartData,
-  type: ChartKind,
-): HighchartsOptions {
+export function getHighchartOptions({
+  data,
+  type,
+  xAxisTitle,
+}: Args): HighchartsOptions {
   switch (type) {
     case 'pie': {
       const sum = data.items.reduce((acc, x) => acc + x.y, 0);
@@ -38,18 +43,49 @@ export function getHighchartOptions(
       };
 
       return {
+        title: {
+          text: '',
+        },
         series: [series],
       };
     }
-    case 'histogram': {
-      const series: SeriesHistogramOptions = {
-        type: 'histogram',
-        baseSeries: 1,
+
+    case 'column': {
+      const series: SeriesColumnOptions = {
+        type: 'column',
+        showInLegend: false,
+        data: data.items.map(
+          (x): PointOptionsObject => ({
+            name: x.label,
+            x: x.x,
+            y: x.y,
+          }),
+        ),
       };
 
       return {
+        title: {
+          text: '',
+        },
         series: [series],
+        xAxis: {
+          title: {
+            text: xAxisTitle,
+          },
+          type: 'category',
+          angle: 180,
+          labels: {
+            autoRotation: [0],
+            autoRotationLimit: 10,
+            staggerLines: 0,
+          },
+        },
       };
+    }
+
+    default: {
+      console.error('unexpected chart type', type);
+      return {};
     }
   }
 }

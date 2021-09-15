@@ -2,7 +2,7 @@ import { chart } from 'highcharts';
 import { useEffect, useRef } from 'react';
 import React from 'react';
 
-import { ChartData } from 'types';
+import { ChartData, ChartType } from 'types';
 import { block } from 'utils/classname';
 
 import { getHighchartOptions } from './getHighchartsOptions';
@@ -12,18 +12,24 @@ const b = block('chart');
 
 type Props = {
   data: ChartData;
+  chartType: ChartType;
+  xAxisTitle?: string;
 };
 
-function Chart({ data }: Props) {
+function Chart({ data, chartType, xAxisTitle }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (ref.current) {
-      const options = getHighchartOptions(data, 'pie');
+      const options = getHighchartOptions({
+        data,
+        type: chartType,
+        xAxisTitle,
+      });
 
       chart(ref.current, options);
     }
-  }, [data]);
+  }, [chartType, data, xAxisTitle]);
 
   return <div className={b()} ref={ref} />;
 }
