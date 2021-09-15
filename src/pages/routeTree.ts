@@ -1,5 +1,16 @@
-import { makeRouteTree, makeStateNode } from 'utils/RouteTree';
+import {
+  makeRouteTree,
+  makeEnumerationNode,
+  makeStringNode,
+} from 'utils/RouteTree';
 
 export const routeTree = makeRouteTree(
-  makeStateNode(['ru', 'en'], 'LANG', { example: null }),
+  makeEnumerationNode(['ru', 'en'], 'LANG', {
+    example: null,
+    projects: makeStringNode('PROJECT', {
+      results: null,
+    }),
+  }),
 );
+
+// console.log('>> route', routeTree.LANG.projects.PROJECT());

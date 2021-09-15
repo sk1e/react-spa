@@ -7,44 +7,78 @@ export interface RouteInterface {
   getElementKey(): string;
 }
 
-export type RouteTree<T> = T extends StateNode<infer S, infer Name, infer Tree>
-  ? Record<S | Name, RouteTree<Tree>>
+export type RouteTree<T> = T extends EnumerationNode<
+  infer S,
+  infer Name,
+  infer Tree
+>
+  ? Record<S | Name, RouteTree<Tree> & RouteInterface>
+  : T extends StringNode<infer Name, infer Tree>
+  ? Record<string, RouteTree<Tree>> &
+      Record<Name, RouteTree<Tree> & RouteInterface>
   : T extends null
-  ? RouteInterface
-  : { [P in keyof T]: RouteTree<T[P]> };
+  ? {}
+  : { [P in keyof T]: RouteTree<T[P]> & RouteInterface };
 
 type RawRouteTree = {
   [routeKey: string]:
     | RawRouteTree
-    | StateNode<string, string, Record<string, any>>
+    | EnumerationNode<string, string, Record<string, any>>
     | null;
 };
 
-type StateNode<
+type EnumerationNode<
   X extends string,
   N extends string,
   T extends Record<string, any>,
 > = {
-  kind: 'state';
+  kind: 'enumeration';
   values: X[];
   tree: T;
   name: N;
 };
 
-function isStateTree(
+type StringNode<N extends string, T extends Record<string, any>> = {
+  kind: 'string';
+  name: N;
+  tree: T;
+};
+
+function isEnumerationNode(
   x: any,
-): x is StateNode<string, string, Record<string, any>> {
-  return (x as StateNode<string, string, Record<string, any>>).kind === 'state';
+): x is EnumerationNode<string, string, Record<string, any>> {
+  return (
+    (x as EnumerationNode<string, string, Record<string, any>>).kind ===
+    'enumeration'
+  );
 }
 
+function isStringNode(x: any): x is StringNode<string, Record<string, any>> {
+  return (x as StringNode<string, Record<string, any>>).kind === 'string';
+}
+
+type Tree =
+  | null
+  | Record<string, any>
+  | EnumerationNode<string, string, Record<string, any>>
+  | StringNode<string, Record<string, any>>;
+
 export function makeRouteTree<
-  T extends RawRouteTree | StateNode<string, string, Record<string, any>>,
+  T extends RawRouteTree | EnumerationNode<string, string, Record<string, any>>,
 >(rawTree: T): RouteTree<T> {
-  return (function loop(
-    tree: Record<string, any> | StateNode<string, string, Record<string, any>>,
-    path: string[] = [],
-  ): RouteTree<T> {
-    if (isStateTree(tree)) {
+  return (function loop(tree: Tree, path: string[] = []): Record<string, any> {
+    const formattedPath = `/${path.join('/')}`;
+
+    const routeData: RouteInterface = {
+      getPath: makeGetPath(formattedPath),
+      getElementKey: () => path[path.length - 1],
+    };
+
+    if (tree === null) {
+      return routeData;
+    }
+
+    if (isEnumerationNode(tree)) {
       return {
         ...tree.values.reduce((acc: any, nodeKey: string) => {
           const xPath = [...path, nodeKey];
@@ -65,28 +99,36 @@ export function makeRouteTree<
       };
     }
 
+    if (isStringNode(tree)) {
+      return new Proxy(
+        {
+          ...routeData,
+          [tree.name]: (() => {
+            const xPath = [...path, `:${tree.name.toLowerCase()}`];
+            return loop(tree.tree, xPath);
+          })(),
+        },
+        {
+          get: (target, prop: string) => {
+            if (prop in target) {
+              return target[prop as keyof typeof target];
+            }
+
+            const xPath = [...path, prop];
+            return loop(tree.tree, xPath);
+          },
+        },
+      );
+    }
+
     return Object.entries(tree).reduce((acc: any, [key, value]) => {
       const xPath = [...path, key];
-
-      const formattedPathElements = xPath;
-      const formattedPath = `/${formattedPathElements.join('/')}`;
-
-      const routeData: RouteInterface = {
-        getPath: makeGetPath(formattedPath),
-        getElementKey: () => key,
-      };
-      if (value === null) {
-        return { ...(acc as any), [key]: routeData };
-      }
       return {
-        ...(acc as any),
-        [key]: {
-          ...(loop(value, xPath) as any),
-          ...routeData,
-        },
+        ...acc,
+        [key]: loop(value, xPath),
       };
-    }, {}) as any as RouteTree<T>;
-  })(rawTree);
+    }, routeData);
+  })(rawTree) as any as RouteTree<T>;
 }
 
 export const makeGetPath =
@@ -100,16 +142,27 @@ export const makeGetPath =
     return `${path}${params}`;
   };
 
-export function makeStateNode<
+export function makeEnumerationNode<
   S extends string,
   XS extends S[],
   N extends string,
   T,
->(values: XS, name: N, tree: T): StateNode<XS[number], N, T> {
+>(values: XS, name: N, tree: T): EnumerationNode<XS[number], N, T> {
   return {
-    kind: 'state',
+    kind: 'enumeration',
     name,
     tree,
     values,
+  };
+}
+
+export function makeStringNode<T, N extends string>(
+  name: N,
+  tree: T,
+): StringNode<N, T> {
+  return {
+    kind: 'string',
+    name,
+    tree,
   };
 }

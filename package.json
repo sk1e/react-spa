@@ -2,6 +2,7 @@
   "name": "react-spa",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://www.globallab.org/",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -10,7 +11,8 @@
     ]
   },
   "scripts": {
-    "start": "razzle start",
+    "start:tsc": "tsc -b -w --preserveWatchOutput",
+    "start": "concurrently \"yarn start:tsc\" \"razzle start\"",
     "build": "razzle build",
     "test": "razzle test --env=jsdom",
     "start:prod": "NODE_ENV=production node build/server.js",
@@ -43,6 +45,7 @@
     "eslint-plugin-flowtype": "^5.9.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "express": "^4.17.1",
+    "highcharts": "^9.2.2",
     "prettier": "^2.3.2",
     "ramda": "^0.27.1",
     "react": "^17.0.2",
@@ -54,15 +57,18 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^2.0.4",
+    "@types/http-proxy-middleware": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
     "babel-eslint": "^10.1.0",
     "babel-preset-razzle": "4.0.6",
+    "concurrently": "^6.2.1",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "html-webpack-plugin": "^4.5.2",
+    "http-proxy-middleware": "^2.0.1",
     "mini-css-extract-plugin": "^0.9.0",
     "razzle": "^4.0.6",
     "razzle-dev-utils": "^4.0.6",

@@ -6,6 +6,7 @@ export type Tag = Extract<
 export type Typography =
   | 'heading-xl'
   | 'heading-l'
+  | 'heading-m'
   | 'text-s'
   | 'text-m'
   | 'label-m'

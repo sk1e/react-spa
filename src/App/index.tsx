@@ -1,5 +1,8 @@
+import { Route } from 'react-router';
+
 import * as globalFeatures from 'features/global';
 import * as pages from 'pages';
+import { routeTree } from 'pages/routeTree';
 import { block } from 'utils/classname';
 import { withContextProviders } from 'utils/react/withContextProviders';
 
@@ -12,9 +15,11 @@ function App() {
   return (
     <globalFeatures.StyleProvider.Component>
       <div className={b()}>
-        {pagesList.map((Page, index) => (
-          <Page.Component key={index} />
-        ))}
+        <Route path={routeTree.LANG.getPath()}>
+          {pagesList.map((Page, index) => (
+            <Page.Component key={index} />
+          ))}
+        </Route>
       </div>
     </globalFeatures.StyleProvider.Component>
   );

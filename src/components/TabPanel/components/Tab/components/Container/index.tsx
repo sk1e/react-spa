@@ -1,10 +1,11 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import { makeDerivedUnit, makeUnitStore } from 'utils/State';
 import { block } from 'utils/classname';
 import { naturalNumbers } from 'utils/math';
 import { withContextProviders } from 'utils/react';
 import { useRequiredContext } from 'utils/react/RequiredContext';
+import { useBrowserLayoutEffect } from 'utils/useBrowserLayoutEffect';
 
 import * as Ripple from './Ripple';
 import { DependenciesContext } from './dependenciesContext';
@@ -43,7 +44,7 @@ function Container({ children }: React.PropsWithChildren<Props>) {
   const allAnimationsAreCompleted = allAnimationsAreCompletedUnit.useState();
   const setRippleStateStoreValue = rippleStateStore.useSetState();
 
-  useLayoutEffect(() => {
+  useBrowserLayoutEffect(() => {
     // NOTE ripple animation node should not be detached when mouse button was pressed but not released,
     // otherwise click event will not be dispatched after mouse release.
     // All animations become completed outside of this range of time, so we can safely unmount them here

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { TabPanel } from 'components';
+import { Example } from 'types';
 import { makePrimaryUnit } from 'utils/State';
 import { block } from 'utils/classname';
 
@@ -9,8 +10,6 @@ import './style.scss';
 const b = block('select-example');
 
 type Props = {};
-
-type Example = 'Todos' | 'Form';
 
 const examples: Example[] = ['Todos', 'Form'];
 

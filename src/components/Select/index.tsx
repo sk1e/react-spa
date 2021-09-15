@@ -1,8 +1,9 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { UnitRenderInterface } from 'utils/State';
 import { block } from 'utils/classname';
+import { useBrowserLayoutEffect } from 'utils/useBrowserLayoutEffect';
 
 import * as c from './components';
 import './style.scss';
@@ -59,7 +60,7 @@ function Select<T>(props: Props<T>) {
     }
   }, []);
 
-  useLayoutEffect(
+  useBrowserLayoutEffect(
     () => () => {
       document.body.removeEventListener('click', handleDocumentBodyClick);
       document.body.style.overflow = 'auto';
@@ -67,7 +68,7 @@ function Select<T>(props: Props<T>) {
     [handleDocumentBodyClick],
   );
 
-  useLayoutEffect(() => {
+  useBrowserLayoutEffect(() => {
     document.body.style.overflow = isExpanded ? 'hidden' : 'auto';
 
     setOptionsStyle(getOptionsStyle(ref.current?.getBoundingClientRect()));

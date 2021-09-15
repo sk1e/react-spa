@@ -28,7 +28,9 @@ function MainLayout({ children, TabPanel }: React.PropsWithChildren<Props>) {
         </div>
         <div className={b('content-outer')}>
           {TabPanel && <TabPanel />}
-          <div className={b('content-inner')}>{children}</div>
+          <div className={b('content-with-padding')}>
+            <div className={b('scrollable-content')}>{children}</div>
+          </div>
         </div>
       </div>
     </div>

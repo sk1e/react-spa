@@ -1,4 +1,5 @@
 import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 let app = require('./server').default;
 
@@ -17,11 +18,14 @@ if (module.hot) {
 const port = process.env.PORT || 3000;
 
 export default express()
+  .use(
+    '/services',
+    createProxyMiddleware({
+      target: 'https://globallab.org/',
+      changeOrigin: true,
+    }),
+  )
   .use((req, res) => app.handle(req, res))
-  .listen(port, function (err) {
-    if (err) {
-      console.error(err);
-      return;
-    }
+  .listen(port, () => {
     console.log(`> Started on port ${port}`);
   });
