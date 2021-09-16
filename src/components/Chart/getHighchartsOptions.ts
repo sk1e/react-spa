@@ -3,6 +3,7 @@ import {
   SeriesPieOptions,
   Options as HighchartsOptions,
   SeriesColumnOptions,
+  SeriesScatterOptions,
 } from 'highcharts';
 
 import { ChartData, ChartType } from 'types';
@@ -54,6 +55,7 @@ export function getHighchartOptions({
       const series: SeriesColumnOptions = {
         type: 'column',
         showInLegend: false,
+        turboThreshold: 0,
         data: data.items.map(
           (x): PointOptionsObject => ({
             name: x.label,
@@ -73,11 +75,42 @@ export function getHighchartOptions({
             text: xAxisTitle,
           },
           type: 'category',
-          angle: 180,
           labels: {
             autoRotation: [0],
             autoRotationLimit: 10,
-            staggerLines: 0,
+          },
+        },
+      };
+    }
+
+    case 'scatter': {
+      const series: SeriesScatterOptions = {
+        type: 'scatter',
+        showInLegend: false,
+        name: '',
+        data: data.items.map(
+          (x): PointOptionsObject => ({
+            name: x.label,
+            x: x.x,
+            y: x.y,
+          }),
+        ),
+        turboThreshold: 0,
+      };
+
+      return {
+        title: {
+          text: '',
+        },
+        series: [series],
+        xAxis: {
+          title: {
+            text: xAxisTitle,
+          },
+          type: 'category',
+          labels: {
+            autoRotation: [0],
+            autoRotationLimit: 10,
           },
         },
       };

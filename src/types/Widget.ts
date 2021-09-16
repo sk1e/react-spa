@@ -35,5 +35,5 @@ export type FilterRange = {
 export type UUID = string;
 
 export type ChartWidgetDescriptorFilter = {
-  answers: Record<UUID, FilterRange>;
+  answers: Record<UUID, FilterRange> | null;
 };

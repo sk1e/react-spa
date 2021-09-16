@@ -28,7 +28,7 @@ function ChartWidget({ widget, project }: Props) {
   const callState = callStateUnit.useState();
   useEffect(() => {
     const filter =
-      widget.descriptor.filter &&
+      widget.descriptor.filter?.answers &&
       Object.entries(widget.descriptor.filter.answers).map(([key, value]) => ({
         [`answers.${key}`]: { $lte: value.to },
       }));
