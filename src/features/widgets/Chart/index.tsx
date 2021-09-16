@@ -3,23 +3,24 @@ import React, { useEffect } from 'react';
 import { Chart } from 'components';
 import { Language } from 'features/global';
 import { API } from 'services';
-import { ChartData, Project, Widget } from 'types';
+import { ChartData, Project, ChartWidget } from 'types';
 import { block } from 'utils/classname';
 import { withContextProviders } from 'utils/react';
 
+import * as WidgetLayout from '../WidgetLayout';
 import { getXAxisTitle } from './getXAxisTitle';
 import './style.scss';
 
 const b = block('chart-widget');
 
 type Props = {
-  widget: Widget;
+  widget: ChartWidget;
   project: Project;
 };
 
 const callStateUnit = API.makeCallStateUnit<ChartData>();
 
-function ChartWidget({ widget, project }: Props) {
+function ChartWidgetComponent({ widget, project }: Props) {
   const call = API.services.getChartData(callStateUnit);
 
   const t = Language.useGetMultilingTranslation();
@@ -27,11 +28,13 @@ function ChartWidget({ widget, project }: Props) {
 
   const callState = callStateUnit.useState();
   useEffect(() => {
-    const filter =
-      widget.descriptor.filter?.answers &&
-      Object.entries(widget.descriptor.filter.answers).map(([key, value]) => ({
-        [`answers.${key}`]: { $lte: value.to },
-      }));
+    const filter = widget.descriptor.filter?.answers
+      ? Object.entries(widget.descriptor.filter.answers).map(
+          ([key, value]) => ({
+            [`answers.${key}`]: { $lte: value.to },
+          }),
+        )
+      : undefined;
 
     call({
       project: project.uuid,
@@ -45,7 +48,7 @@ function ChartWidget({ widget, project }: Props) {
   }, []);
 
   return (
-    <div className={b()}>
+    <WidgetLayout.Component className={b()} widget={widget}>
       {callState.kind === 'successfull' && (
         <Chart.Component
           data={callState.data}
@@ -53,10 +56,10 @@ function ChartWidget({ widget, project }: Props) {
           xAxisTitle={xAxisTitle && t(xAxisTitle)}
         />
       )}
-    </div>
+    </WidgetLayout.Component>
   );
 }
 
-export const Component = withContextProviders(ChartWidget, [
+export const Component = withContextProviders(ChartWidgetComponent, [
   callStateUnit.ContextProvider,
 ]);

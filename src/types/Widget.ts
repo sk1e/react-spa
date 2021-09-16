@@ -1,13 +1,25 @@
 import { ChartType } from './ChartType';
 import { MultilingString } from './MultilingString';
 
-export type Widget = ChartWidget;
-
-export type ChartWidget = {
+export type GenericWidget<Type extends string, Descriptor> = {
   uuid: string;
-  type: 'chart';
-  descriptor: ChartWidgetDescriptor;
+  title: MultilingString;
+  type: Type;
+  descriptor: Descriptor;
 };
+
+export type Widget = ChartWidget | MapWidget | DatalistWidget | GalleryWidget;
+
+export type ChartWidget = GenericWidget<'chart', ChartWidgetDescriptor>;
+export type MapWidget = GenericWidget<'map', MapWidgetDescriptor>;
+export type DatalistWidget = GenericWidget<
+  'datalist',
+  DataListWidgetDescriptor
+>;
+export type GalleryWidget = GenericWidget<'gallery', GalleryWidgetDescriptor>;
+
+export type DataListWidgetDescriptor = {};
+export type GalleryWidgetDescriptor = {};
 
 export type ChartWidgetDescriptor = {
   title: MultilingString;
@@ -26,6 +38,12 @@ export type ChartWidgetDescriptor = {
     shrinkCatTitle: MultilingString;
   }>;
 };
+
+export type MapWidgetDescriptor = {
+  layers: MapLayer[];
+};
+
+export type MapLayer = any; // TODO complete
 
 export type FilterRange = {
   from: number;

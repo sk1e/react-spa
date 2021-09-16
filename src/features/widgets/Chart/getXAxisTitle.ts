@@ -1,11 +1,11 @@
-import { Project, Widget } from 'types';
+import { ChartWidget, Project } from 'types';
 import { MultilingString } from 'types/MultilingString';
 
 const regex = /Fact\.(.+)/;
 
 export function getXAxisTitle(
   project: Project,
-  widget: Widget,
+  widget: ChartWidget,
 ): MultilingString | undefined {
   const match = regex.exec(widget.descriptor.xVar);
 
