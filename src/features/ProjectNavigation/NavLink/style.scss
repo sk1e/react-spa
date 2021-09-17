@@ -1,0 +1,22 @@
+@use "style/colors";
+
+.project-nav-link {
+  display: block;
+  text-decoration: none;
+
+  @include colors.themed-color('fg-primary') using ($color) {
+    color: $color;
+  }
+
+  &:hover {
+    @include colors.themed-bg(4) using ($color) {
+      background: $color;
+    }
+  }
+
+  &_active {
+    @include colors.themed-color('accent-primary') using ($color) {
+      color: $color;
+    }
+  }
+}

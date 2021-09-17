@@ -5,7 +5,7 @@
   flex-direction: column;
   height: 100vh;
 
-  &__sidebar-and-content {
+  &__side-panel-and-content {
     flex: 1;
     transition: background 300ms;
     display: flex;
@@ -16,7 +16,7 @@
     }
   }
 
-  &__sidebar {
+  &__side-panel {
     transition: background 300ms;
     width: 200px;
     height: 100%;

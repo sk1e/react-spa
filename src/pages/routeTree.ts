@@ -8,7 +8,13 @@ export const routeTree = makeRouteTree(
   makeEnumerationNode(['ru', 'en'], 'LANG', {
     example: null,
     projects: makeStringNode('PROJECT', {
-      results: null,
+      about: null,
+      investigation: null,
+      findings: null,
+      discussion: null,
+      authorsBlog: null,
+      resources: null,
+      participants: null,
     }),
   }),
 );

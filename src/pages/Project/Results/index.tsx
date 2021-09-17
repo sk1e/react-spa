@@ -12,7 +12,7 @@ type Props = {
 
 function Results({ project }: Props) {
   return (
-    <Route path={routeTree.LANG.projects.PROJECT.results.getPath()} exact>
+    <Route path={routeTree.LANG.projects.PROJECT.findings.getPath()} exact>
       <ProjectResults.Component project={project} />
     </Route>
   );

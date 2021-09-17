@@ -61,6 +61,12 @@
         color: $color;
       }
     }
+
+    &_accent-primary {
+      @include colors.themed-color('accent-primary') using ($color) {
+        color: $color;
+      }
+    }
   }
 
   &_weight {

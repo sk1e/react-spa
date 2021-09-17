@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Text } from 'components';
 import { Header } from 'features/Header';
-import { Language } from 'features/global';
 import { block } from 'utils/classname';
 
 import './style.scss';
@@ -11,21 +9,23 @@ const b = block('main-layout');
 
 type Props = {
   TabPanel?: React.ComponentType;
+  SidePanel?: React.ComponentType;
 };
 
-function MainLayout({ children, TabPanel }: React.PropsWithChildren<Props>) {
-  const sidebarText = Language.useTranslation({
-    en: 'sidebar',
-    ru: 'боковая панель',
-  });
-
+function MainLayout({
+  children,
+  TabPanel,
+  SidePanel,
+}: React.PropsWithChildren<Props>) {
   return (
     <div className={b()}>
       <Header />
-      <div className={b('sidebar-and-content')}>
-        <div className={b('sidebar')}>
-          <Text.Component>{sidebarText}</Text.Component>
-        </div>
+      <div className={b('side-panel-and-content')}>
+        {SidePanel && (
+          <div className={b('side-panel')}>
+            <SidePanel />
+          </div>
+        )}
         <div className={b('content-outer')}>
           {TabPanel && <TabPanel />}
           <div className={b('content-with-padding')}>

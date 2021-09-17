@@ -13,7 +13,7 @@ export type Typography =
   | 'label-l'
   | 'label-xl';
 
-export type Color = 'primary' | 'secondary' | 'error';
+export type Color = 'primary' | 'secondary' | 'error' | 'accent-primary';
 
 export type Weight = 'normal' | 'bold';
 

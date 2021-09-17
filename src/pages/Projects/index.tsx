@@ -21,7 +21,7 @@ function Projects({}: Props) {
     (project: ProjectListProject) => {
       const projectID = project.code.replaceAll('_', '-');
       return generatePath(
-        routeTree.LANG.projects[projectID].results.getPath(),
+        routeTree.LANG.projects[projectID].findings.getPath(),
         { lang },
       );
     },
