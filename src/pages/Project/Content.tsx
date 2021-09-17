@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Route, useRouteMatch } from 'react-router';
 
+import * as MainLayout from 'features/MainLayout';
 import { API } from 'services';
 import { Project } from 'types';
 import { withContextProviders } from 'utils/react';
@@ -13,23 +14,26 @@ type Props = {};
 const callStateUnit = API.makeCallStateUnit<Project>();
 
 function Content({}: Props) {
-  const call = API.services.projectRead(callStateUnit);
+  const { call, dataComponentConfigurator } =
+    API.services.projectRead(callStateUnit);
   const match = useRouteMatch<{ project: string }>();
 
   const code = match.params.project.replace(/-/g, '_');
-
-  const projectRequest = callStateUnit.useState();
 
   useEffect(() => {
     call({ code });
   }, [call, code]);
 
+  const Data = dataComponentConfigurator
+    .onSuccess(data => <Results.Component project={data} />)
+    .getComponent();
+
   return (
-    <Route path={routeTree.LANG.projects.PROJECT.results.getPath()}>
-      {projectRequest.kind === 'successfull' && (
-        <Results.Component project={projectRequest.data} />
-      )}
-    </Route>
+    <MainLayout.Component>
+      <Route path={routeTree.LANG.projects.PROJECT.results.getPath()}>
+        <Data />
+      </Route>
+    </MainLayout.Component>
   );
 }
 

@@ -17,9 +17,20 @@ type Props = {
 const callStateUnit = API.makeCallStateUnit<ProjectListProject[]>();
 
 function ProjectList({ getProjectLinkPath }: Props) {
-  const callState = callStateUnit.useState();
+  const { call, dataComponentConfigurator } =
+    API.services.projectList(callStateUnit);
 
-  const call = API.services.projectList(callStateUnit);
+  const Data = dataComponentConfigurator
+    .onSuccess(data =>
+      data.map(x => (
+        <ProjectCard.Component
+          key={x.code}
+          project={x}
+          getProjectLinkPath={getProjectLinkPath}
+        />
+      )),
+    )
+    .getComponent();
 
   useEffect(() => {
     call({
@@ -38,14 +49,7 @@ function ProjectList({ getProjectLinkPath }: Props) {
 
   return (
     <div className={b()}>
-      {callState.kind === 'successfull' &&
-        callState.data.map(x => (
-          <ProjectCard.Component
-            key={x.code}
-            project={x}
-            getProjectLinkPath={getProjectLinkPath}
-          />
-        ))}
+      <Data />
     </div>
   );
 }

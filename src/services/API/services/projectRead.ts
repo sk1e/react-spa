@@ -1,6 +1,6 @@
 import { Project } from 'types';
 
-import { makeRequest } from './private';
+import { makeRequest } from './utils';
 
 type InputData = {
   code: string;

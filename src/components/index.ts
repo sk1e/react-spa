@@ -6,3 +6,4 @@ export * as TabPanel from './TabPanel';
 export * as Checkbox from './Checkbox';
 export * as Radio from './Radio';
 export * as Chart from './Chart';
+export * as Preloader from './Preloader';

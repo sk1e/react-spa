@@ -21,12 +21,12 @@ type Props = {
 const callStateUnit = API.makeCallStateUnit<ChartData>();
 
 function ChartWidgetComponent({ widget, project }: Props) {
-  const call = API.services.getChartData(callStateUnit);
+  const { call, dataComponentConfigurator } =
+    API.services.getChartData(callStateUnit);
 
   const t = Language.useGetMultilingTranslation();
   const xAxisTitle = getXAxisTitle(project, widget);
 
-  const callState = callStateUnit.useState();
   useEffect(() => {
     const filter = widget.descriptor.filter?.answers
       ? Object.entries(widget.descriptor.filter.answers).map(
@@ -47,15 +47,19 @@ function ChartWidgetComponent({ widget, project }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const Data = dataComponentConfigurator
+    .onSuccess(data => (
+      <Chart.Component
+        data={data}
+        chartType={widget.descriptor.chartType}
+        xAxisTitle={xAxisTitle && t(xAxisTitle)}
+      />
+    ))
+    .getComponent();
+
   return (
     <WidgetLayout.Component className={b()} widget={widget}>
-      {callState.kind === 'successfull' && (
-        <Chart.Component
-          data={callState.data}
-          chartType={widget.descriptor.chartType}
-          xAxisTitle={xAxisTitle && t(xAxisTitle)}
-        />
-      )}
+      <Data />
     </WidgetLayout.Component>
   );
 }

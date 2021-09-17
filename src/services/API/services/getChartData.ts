@@ -1,6 +1,6 @@
 import { ChartData, ChartDataItem, ChartType } from 'types';
 
-import { makeRequest } from './private';
+import { makeRequest } from './utils';
 
 type APIOutputData = {
   series: SeriesItem[];

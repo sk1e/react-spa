@@ -1,6 +1,6 @@
 import { ProjectListProject } from 'types';
 
-import { makeRequest } from './private';
+import { makeRequest } from './utils';
 
 type InputData = {
   data: {

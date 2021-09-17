@@ -1,8 +1,20 @@
+import React from 'react';
+
 export type CallState<T> =
   | InitialState
   | PendingState
   | ErrorState
-  | SuccessfullState<T>;
+  | SuccessfulState<T>;
+
+export type DataComponentConfigurator<T> = {
+  onSuccess(
+    makePendingComponent: (data: T) => React.ReactNode,
+  ): DataComponentConfigurator<T>;
+  onPending?(
+    makePendingComponent: () => React.ReactNode,
+  ): DataComponentConfigurator<T>;
+  getComponent(): React.ComponentType;
+};
 
 type InitialState = {
   kind: 'initial';
@@ -17,7 +29,7 @@ type ErrorState = {
   message: string;
 };
 
-type SuccessfullState<T> = {
-  kind: 'successfull';
+type SuccessfulState<T> = {
+  kind: 'successful';
   data: T;
 };

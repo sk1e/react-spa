@@ -2,11 +2,17 @@ import { useCallback } from 'react';
 
 import { PrimaryStateUnit } from 'utils/State';
 
-import { CallState } from '../types';
+import { CallState, DataComponentConfigurator } from '../../types';
+import { makeDataComponentConfigurator } from './makeDataComponentConfigurator';
 
-type Res<Params, Result> = (
-  unit: PrimaryStateUnit<CallState<Result>>,
-) => (data: Params) => void;
+type Result<Params, Data> = {
+  call(params: Params): void;
+  dataComponentConfigurator: DataComponentConfigurator<Data>;
+};
+
+type Res<Params, Data> = (
+  unit: PrimaryStateUnit<CallState<Data>>,
+) => Result<Params, Data>;
 
 type RequestMethod = 'get' | 'post';
 
@@ -72,7 +78,7 @@ export function makeRequest<
               }
               case 1: {
                 const data = converter(output.response);
-                setState({ kind: 'successfull', data });
+                setState({ kind: 'successful', data });
               }
             }
           })
@@ -85,6 +91,9 @@ export function makeRequest<
       [setState],
     );
 
-    return callAPI;
+    return {
+      call: callAPI,
+      dataComponentConfigurator: makeDataComponentConfigurator(unit.useState),
+    };
   };
 }
